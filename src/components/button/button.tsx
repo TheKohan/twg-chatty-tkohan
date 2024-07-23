@@ -1,48 +1,75 @@
-import React, { PropsWithChildren } from 'react';
-import { Pressable, StyleSheet, ViewStyle } from 'react-native';
-import { Icon, IconVariant } from '../icon';
-import { Typography } from '../typography';
+import React from 'react';
+import { StyleSheet, ViewStyle } from 'react-native';
 import { BaseButton, BaseButtonProps } from './base-button';
-import { colors } from '@chatty/theme';
+import { borders, colors } from '@chatty/theme';
+import { MakeOptional } from '@chatty/utils';
 
-type ButtonProps = {
-  variant: 'primary' | 'label';
-} & Omit<BaseButtonProps, 'containerStyle' | 'iconColor'>;
+type PublicButtonProps = MakeOptional<
+  Omit<
+    Required<BaseButtonProps>,
+    | 'containerStyle'
+    | 'containerStylePressed'
+    | 'iconColor'
+    | 'iconColorPressed'
+  >,
+  'disabled'
+>;
 
-export const Button: React.FC<ButtonProps> = ({
-  label,
-  onPress,
-  variant,
-  icon,
-  iconPosition,
-}) => {
+type PrimaryButtonProps = {
+  variant: 'primary';
+} & Omit<PublicButtonProps, 'icon' | 'iconPosition'>;
+
+type LabelButtonProps = {
+  variant: 'label';
+} & Required<
+  Pick<PublicButtonProps, 'icon' | 'iconPosition' | 'label' | 'onPress'>
+>;
+
+type IconButtonProps = {
+  variant: 'icon';
+} & Omit<PublicButtonProps, 'label' | 'iconPosition'>;
+
+type ButtonProps = PrimaryButtonProps | LabelButtonProps | IconButtonProps;
+
+export const Button: React.FC<ButtonProps> = props => {
+  const { variant, ...rest } = props;
+
   return (
     <BaseButton
-      label={label}
-      onPress={onPress}
-      icon={icon}
-      iconPosition={iconPosition}
+      {...rest}
+      iconColor={variant === 'primary' ? 'white' : 'plum700'}
+      iconColorPressed={variant === 'primary' ? 'white' : 'plum500'}
       containerStyle={styles[variant]}
-      iconColor={variant === 'primary' ? 'white' : 'plum500'}
+      containerStylePressed={pressedStyles[variant]}
     />
   );
 };
 
 const styles = StyleSheet.create({
   primary: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
+    padding: 12,
+    borderRadius: borders.sm,
     backgroundColor: colors.plum500,
   },
   label: {
-    flex: 1,
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
+    padding: 12,
+    borderRadius: borders.sm,
     backgroundColor: 'transparent',
   },
+  icon: {
+    padding: 12,
+    borderRadius: borders.sm,
+    backgroundColor: 'transparent',
+  },
+});
+
+const pressedStyles = StyleSheet.create({
+  primary: {
+    backgroundColor: colors.plum700,
+  },
+  label: {},
+  icon: {},
 });
