@@ -6,7 +6,7 @@ export const App = () => {
   return (
     <Layout>
       <SafeAreaView style={styles.container}>
-        <Text style={{ fontFamily: 'Inter-Black', fontSize: 30 }}>
+        <Text style={{ fontFamily: 'Poppins-Medium', fontSize: 30 }}>
           Inter Black
         </Text>
         <Text style={{ fontSize: 30 }}>Platform Default</Text>
