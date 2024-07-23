@@ -3,7 +3,7 @@ import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { View } from 'react-native';
-import { fontAssets } from '@chatty/theme';
+import { colors, fontAssets } from '@chatty/theme';
 import { StatusBar } from 'expo-status-bar';
 
 SplashScreen.preventAutoHideAsync();
@@ -22,7 +22,7 @@ export const Layout: React.FC<PropsWithChildren> = ({ children }) => {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: colors.blue100 }}>
       <StatusBar style='auto' />
       {children}
     </View>

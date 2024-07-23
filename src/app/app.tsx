@@ -8,11 +8,7 @@ import { FC } from 'react';
 import { Icon, Typography } from '@chatty/components';
 import { borders, colors } from '@chatty/theme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
-type RootStackParamList = {
-  Rooms: undefined;
-  Room: { roomId: string };
-};
+import { RootStackParamList } from './navigation-types';
 
 //@TODO: export this
 const Stack = createNativeStackNavigator<RootStackParamList>();
