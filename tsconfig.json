@@ -7,5 +7,6 @@
       "@chatty/*": ["src/*"]
     }
   },
-  "include": ["external-types/**/*.d.ts", "src/**/*", "App.tsx"]
+  "include": ["external-types/**/*.d.ts", "src/**/*", "App.tsx"],
+  "exclude": ["node_modules"]
 }
