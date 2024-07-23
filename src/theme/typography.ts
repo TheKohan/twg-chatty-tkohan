@@ -67,3 +67,5 @@ export const typography = {
   string,
   Omit<TextStyle, 'fontFamily'> & { fontFamily: Fonts }
 >;
+
+export type TypographyVariant = keyof typeof typography;

@@ -19,3 +19,5 @@ export const Icon = {
   visionLow: VisionLow,
   rooms: Rooms,
 } as const;
+
+export type IconVariant = keyof typeof Icon;

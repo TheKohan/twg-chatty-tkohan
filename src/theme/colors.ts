@@ -14,3 +14,5 @@ export const colors = {
   active: '#A8FF76',
   error: '#FF445A',
 } as const;
+
+export type ColorVariant = keyof typeof colors;
