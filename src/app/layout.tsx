@@ -2,8 +2,10 @@ import { PropsWithChildren } from 'react';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
-import { fontAssets } from '@chatty/theme';
+import { View, StyleSheet } from 'react-native';
+import { colors, fontAssets } from '@chatty/theme';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -21,13 +23,10 @@ export const Layout: React.FC<PropsWithChildren> = ({ children }) => {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={{ fontFamily: 'Inter-Black', fontSize: 30 }}>
-        Inter Black
-      </Text>
-      <Text style={{ fontSize: 30 }}>Platform Default</Text>
+    <SafeAreaProvider style={styles.container}>
+      <StatusBar backgroundColor={colors.blue300} style='auto' />
       <View style={{ flex: 1 }}>{children}</View>
-    </View>
+    </SafeAreaProvider>
   );
 };
 
