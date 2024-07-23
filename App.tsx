@@ -1,3 +1,3 @@
-import { App } from '@chatty/app';
+import Root from '@chatty/app';
 
-export default App;
+export default Root;

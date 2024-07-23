@@ -23,17 +23,12 @@ export const Layout: React.FC<PropsWithChildren> = ({ children }) => {
   }
 
   return (
-    <SafeAreaProvider style={styles.container}>
-      <StatusBar backgroundColor={colors.blue300} style='auto' />
-      <View style={{ flex: 1 }}>{children}</View>
-    </SafeAreaProvider>
+    <SafeAreaView
+      edges={['top', 'left', 'right']}
+      style={{ flex: 1, backgroundColor: colors.blue300 }}
+    >
+      <StatusBar style='auto' />
+      <View style={{ flex: 1, backgroundColor: colors.white }}>{children}</View>
+    </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
