@@ -28,7 +28,9 @@ export const Layout: React.FC<PropsWithChildren> = ({ children }) => {
       style={{ flex: 1, backgroundColor: colors.blue300 }}
     >
       <StatusBar style='auto' />
-      <View style={{ flex: 1, backgroundColor: colors.white }}>{children}</View>
+      <View style={{ flex: 1, backgroundColor: colors.blue100 }}>
+        {children}
+      </View>
     </SafeAreaView>
   );
 };

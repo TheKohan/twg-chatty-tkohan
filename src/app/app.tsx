@@ -1,46 +1,54 @@
-import { StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, Icon } from '@chatty/components';
+import { Text, View, StyleSheet } from 'react-native';
+import {
+  createNativeStackNavigator,
+  NativeStackHeaderProps,
+} from '@react-navigation/native-stack';
+import { Rooms, Room } from '@chatty/routes';
+import { FC } from 'react';
+import { Icon, Typography } from '@chatty/components';
+import { borders, colors } from '@chatty/theme';
+
+const Stack = createNativeStackNavigator();
 
 export const App = () => {
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={{ fontFamily: 'Poppins-Medium', fontSize: 30 }}>
-        Poppins Medium
-      </Text>
-      <Button
-        label='This is a primary button'
-        variant='primary'
-        onPress={() => console.log('Primary clicked')}
+    <Stack.Navigator initialRouteName='Rooms'>
+      <Stack.Screen
+        options={{ header: Header }}
+        name='Rooms'
+        component={Rooms}
       />
-      <Button
-        label='This is a label button'
-        variant='label'
-        onPress={() => console.log('Label clicked')}
-        icon='profile'
-        iconPosition='right'
-      />
-      <Button
-        variant='icon'
-        onPress={() => console.log('Icon clicked')}
-        icon='profile'
-      />
-      <View>
-        <Icon.phone />
-      </View>
+      <Stack.Screen options={{ header: Header }} name='Room' component={Room} />
+    </Stack.Navigator>
+  );
+};
 
-      <Text style={{ fontSize: 30 }}>Platform Default</Text>
-      <View style={styles.container}>
-        <Text>Open up App.tsx to start working on your app!</Text>
+const Header: FC<NativeStackHeaderProps> = ({ route }) => {
+  return (
+    <View style={styles.container}>
+      <Typography variant='h1' color='plum500'>
+        {route.name}
+      </Typography>
+      <View style={styles.iconContainer}>
+        <Icon.search />
+        <Icon.rooms />
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 16,
+    backgroundColor: colors.blue300,
+    borderBottomRightRadius: borders.lg,
+    borderBottomLeftRadius: borders.lg,
+  },
+  iconContainer: {
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    gap: 8,
   },
 });
