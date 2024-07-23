@@ -6,5 +6,6 @@
     "paths": {
       "@chatty/*": ["src/*"]
     }
-  }
+  },
+  "include": ["external-types/**/*.d.ts", "src/**/*", "App.tsx"]
 }
