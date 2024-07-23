@@ -2,9 +2,8 @@ import { PropsWithChildren } from 'react';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { colors, fontAssets } from '@chatty/theme';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { View } from 'react-native';
+import { fontAssets } from '@chatty/theme';
 import { StatusBar } from 'expo-status-bar';
 
 SplashScreen.preventAutoHideAsync();
@@ -23,14 +22,9 @@ export const Layout: React.FC<PropsWithChildren> = ({ children }) => {
   }
 
   return (
-    <SafeAreaView
-      edges={['top', 'left', 'right']}
-      style={{ flex: 1, backgroundColor: colors.blue300 }}
-    >
+    <View style={{ flex: 1 }}>
       <StatusBar style='auto' />
-      <View style={{ flex: 1, backgroundColor: colors.blue100 }}>
-        {children}
-      </View>
-    </SafeAreaView>
+      {children}
+    </View>
   );
 };

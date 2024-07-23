@@ -7,8 +7,15 @@ import { Rooms, Room } from '@chatty/routes';
 import { FC } from 'react';
 import { Icon, Typography } from '@chatty/components';
 import { borders, colors } from '@chatty/theme';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const Stack = createNativeStackNavigator();
+type RootStackParamList = {
+  Rooms: undefined;
+  Room: { roomId: string };
+};
+
+//@TODO: export this
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const App = () => {
   return (
@@ -24,8 +31,9 @@ export const App = () => {
 };
 
 const Header: FC<NativeStackHeaderProps> = ({ route }) => {
+  const insets = useSafeAreaInsets();
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { paddingTop: insets.top }]}>
       <Typography variant='h1' color='plum500'>
         {route.name}
       </Typography>
