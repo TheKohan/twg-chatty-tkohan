@@ -60,7 +60,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   icon: {
-    padding: 12,
     borderRadius: borders.sm,
     backgroundColor: 'transparent',
   },

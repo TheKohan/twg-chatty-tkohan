@@ -31,6 +31,11 @@ export const typography = {
     fontFamily: 'Poppins-SemiBold',
     fontSize: 16,
   },
+  'h4-header': {
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 14,
+    lineHeight: 21,
+  },
   button: {
     fontFamily: 'Poppins-SemiBold',
     fontSize: 16,
