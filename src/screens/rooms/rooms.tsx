@@ -39,7 +39,7 @@ const RoomList: React.FC<{ userRooms: RoomsType }> = ({ userRooms }) => {
     />
   );
 };
-
+// TODO refactor all of this
 const RoomItem: React.FC<{ room: SingleRoomType }> = ({ room }) => {
   const { navigate } = useNavigation<RoomsNavigationProp>();
   const { loading, data, error } = useQuery(GET_ROOM, {

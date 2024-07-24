@@ -4,6 +4,7 @@ import type { RouteProp } from '@react-navigation/native';
 export type RootStackParamList = {
   Rooms: undefined;
   Room: { roomId: string; roomName: string };
+  Login: undefined;
 };
 
 export type RoomsNavigationProp = NativeStackNavigationProp<
