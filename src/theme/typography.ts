@@ -7,8 +7,9 @@ export const fontAssets = {
   'Poppins-Regular': require(`${FONT_PATH}/Poppins-Regular.ttf`),
   'Poppins-SemiBold': require(`${FONT_PATH}/Poppins-SemiBold.ttf`),
   'Poppins-Medium': require(`${FONT_PATH}/Poppins-Medium.ttf`),
-  'SF-Compact-Display': require(`${FONT_PATH}/sf-compact-display-medium.otf`),
-  'SF-Compact-Text': require(`${FONT_PATH}/sf-compact-text-heavy.otf`),
+  'SF-Compact-Display-Regular': require(`${FONT_PATH}/SFCompactDisplay-Regular.otf`),
+  'SF-Compact-Display-Bold': require(`${FONT_PATH}/SFCompactDisplay-Bold.otf`),
+  'SF-Compact-Text-Regular': require(`${FONT_PATH}/SFCompactText-Regular.otf`),
 } as const;
 
 type Fonts = keyof typeof fontAssets;
@@ -50,16 +51,17 @@ export const typography = {
     lineHeight: 10,
   },
   bodyText: {
-    fontFamily: 'SF-Compact-Text',
+    fontFamily: 'SF-Compact-Text-Regular',
+    fontWeight: 'thin',
     fontSize: 14,
   },
   captionText: {
-    fontFamily: 'SF-Compact-Display',
+    fontFamily: 'SF-Compact-Display-Bold',
     fontSize: 12,
     lineHeight: 16,
   },
   specialText: {
-    fontFamily: 'SF-Compact-Display',
+    fontFamily: 'SF-Compact-Display-Regular',
     fontSize: 12,
     lineHeight: 16,
   },
