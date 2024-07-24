@@ -5,6 +5,7 @@ export type RootStackParamList = {
   Rooms: undefined;
   Room: { roomId: string; roomName: string };
   Login: undefined;
+  SignUp: undefined;
 };
 
 export type RoomsNavigationProp = NativeStackNavigationProp<
@@ -15,7 +16,13 @@ export type RoomNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   'Rooms'
 >;
+export type LoginNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'Login'
+>;
 
 export type RoomsRouteProp = RouteProp<RootStackParamList, 'Rooms'>;
 
 export type RoomRouteProp = RouteProp<RootStackParamList, 'Room'>;
+
+export type LoginRouteProp = RouteProp<RootStackParamList, 'Login'>;

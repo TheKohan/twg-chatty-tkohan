@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Rooms, Room, Login } from '@chatty/screens';
+import { Rooms, Room, Login, SignUp } from '@chatty/screens';
 import { RootStackParamList } from '@chatty/types';
 import { Header } from '@chatty/components';
 
@@ -36,6 +36,11 @@ export const App = () => {
             options={{ header: () => null }}
             name='Login'
             component={Login}
+          />
+          <Stack.Screen
+            options={{ header: () => null }}
+            name='SignUp'
+            component={SignUp}
           />
         </>
       )}

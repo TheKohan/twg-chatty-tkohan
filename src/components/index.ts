@@ -5,3 +5,4 @@ export * from './loader';
 export * from './status-wrapper';
 export * from './headers.tsx';
 export * from './chat';
+export * from './input';
