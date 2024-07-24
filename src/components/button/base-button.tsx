@@ -31,36 +31,43 @@ export const BaseButton: React.FC<BaseButtonProps> = ({
 
   const ButtonIcon = icon ? Icon[icon] : null;
 
+  const getIconColor = () => {
+    if (disabled) return colors.white;
+    if (isPressed) return colors[iconColorPressed];
+    return colors[iconColor];
+  };
+
+  const getTextColor = () => {
+    if (disabled) return 'white';
+    if (isPressed) return iconColorPressed;
+    return iconColor;
+  };
+
   return (
     <Pressable
       style={({ pressed }) => [
         containerStyle,
-        pressed ? containerStylePressed : {},
-        disabled ? { opacity: 0.5 } : {},
+        pressed && !disabled ? containerStylePressed : {},
+        disabled ? { backgroundColor: colors.gray300 } : {},
       ]}
-      onPressIn={() => setIsPressed(true)}
-      onPressOut={() => setIsPressed(false)}
+      onPressIn={() => !disabled && setIsPressed(true)}
+      onPressOut={() => !disabled && setIsPressed(false)}
       disabled={disabled}
-      onPress={onPress}
+      onPress={disabled ? undefined : onPress}
     >
       {icon && iconPosition === 'left' && ButtonIcon && (
         <View style={label ? { paddingRight: 8 } : {}}>
-          <ButtonIcon
-            color={isPressed ? colors[iconColor] : colors[iconColorPressed]}
-          />
+          <ButtonIcon color={getIconColor()} />
         </View>
       )}
       {label ? (
-        <Typography
-          color={isPressed ? iconColor : iconColorPressed}
-          variant='button'
-        >
+        <Typography color={getTextColor()} variant='button'>
           {label}
         </Typography>
       ) : null}
       {icon && iconPosition === 'right' && ButtonIcon && (
         <View style={{ paddingLeft: 8 }}>
-          <ButtonIcon color={iconColor} />
+          <ButtonIcon color={getIconColor()} />
         </View>
       )}
     </Pressable>
