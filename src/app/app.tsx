@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import {
   createNativeStackNavigator,
   NativeStackHeaderProps,
@@ -8,7 +8,7 @@ import { FC } from 'react';
 import { Icon, Typography } from '@chatty/components';
 import { borders, colors } from '@chatty/theme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { RootStackParamList } from './navigation-types';
+import { RootStackParamList } from '@chatty/types';
 
 //@TODO: export this
 const Stack = createNativeStackNavigator<RootStackParamList>();
