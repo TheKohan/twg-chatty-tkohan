@@ -12,6 +12,5 @@ import { Chat } from '@chatty/components';
 export const Room = () => {
   const { params } = useRoute<RoomRouteProp>();
   const { data: userData } = useQuery(GET_CURRENT_USER);
-
   return <Chat roomId={params.roomId} user={userData?.user ?? undefined} />;
 };
