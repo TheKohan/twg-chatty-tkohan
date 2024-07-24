@@ -9,10 +9,12 @@ import { timeAgo } from '@chatty/utils';
 import { borders, colors } from '@chatty/theme';
 
 export const Rooms = () => {
-  const { loading, error, data } = useQuery(GET_ALL_ROOMS);
+  const { loading, error, data } = useQuery(GET_ALL_ROOMS, {
+    pollInterval: 1000 * 10,
+  });
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: colors.blue100 }}>
       {loading && <Text>Loading...</Text>}
       {error && <Text>Error!</Text>}
       {data?.usersRooms && <RoomList userRooms={data.usersRooms} />}
@@ -26,7 +28,7 @@ const RoomList: React.FC<{ userRooms: RoomsType }> = ({ userRooms }) => {
       {userRooms.rooms?.map(room => {
         if (!room) return null;
 
-        return <>{room.id && <RoomItem key={room.id} room={room} />}</>;
+        return room.id && <RoomItem key={room.id} room={room} />;
       })}
     </View>
   );
@@ -36,6 +38,7 @@ const RoomItem: React.FC<{ room: SingleRoomType }> = ({ room }) => {
   const { navigate } = useNavigation<RoomsNavigationProp>();
   const { loading, data, error } = useQuery(GET_ROOM, {
     variables: { id: room.id ?? '' },
+    pollInterval: 1000,
   });
 
   const lastMessage = data?.room?.messages?.[0]?.body ?? '';

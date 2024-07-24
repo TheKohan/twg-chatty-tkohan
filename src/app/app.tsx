@@ -3,7 +3,7 @@ import {
   createNativeStackNavigator,
   NativeStackHeaderProps,
 } from '@react-navigation/native-stack';
-import { Rooms, Room } from '@chatty/routes';
+import { Rooms, Room } from '@chatty/screens';
 import { FC } from 'react';
 import { Icon, Typography } from '@chatty/components';
 import { borders, colors } from '@chatty/theme';
