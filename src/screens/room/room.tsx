@@ -52,32 +52,33 @@ export const Room = () => {
 
   const onSend = useCallback((messages: IMessage[] = []) => {
     console.log(messages);
+    /** TODO send via api */
     setMessages(previousMessages =>
-      GiftedChat.append(previousMessages, messages)
+      GiftedChat.prepend(previousMessages, messages)
     );
   }, []);
 
   return (
-    <View style={{ flex: 1 }}>
-      <GiftedChat
-        messages={messages}
-        inverted={false}
-        user={data.room.user ? mapUserToGifted(userData?.user) : undefined}
-        onSend={onSend}
-        renderBubble={props => <ChatBubble {...props} />}
-        // isTyping={}
-        // onInputTextChanged={}
-        renderFooter={() => <Text>Footer</Text>}
-        renderInputToolbar={props => <ChatInput {...props} />}
-        alwaysShowSend
-        renderSend={props => <ChatSend {...props} />}
-        keyboardShouldPersistTaps='always'
-      />
-    </View>
+    <GiftedChat
+      messages={messages}
+      inverted={false}
+      user={data.room.user ? mapUserToGifted(userData?.user) : undefined}
+      onSend={onSend}
+      renderBubble={props => <ChatBubble {...props} />}
+      // isTyping={}
+      // onInputTextChanged={}
+      renderMessageImage={() => <Icon.profile width={40} height={40} />}
+      renderFooter={() => <Text>Footer</Text>}
+      renderInputToolbar={props => <ChatInput {...props} />}
+      renderSend={props => <ChatSend {...props} />}
+      keyboardShouldPersistTaps='always'
+    />
   );
 };
 
 const ChatSend: FC<SendProps<IMessage>> = props => {
+  const [pressed, setPressed] = useState(false);
+
   return (
     <Send
       {...props}
@@ -86,8 +87,14 @@ const ChatSend: FC<SendProps<IMessage>> = props => {
         right: -50,
         top: 0,
       }}
+      alwaysShowSend
+      sendButtonProps={{
+        activeOpacity: 1,
+        onPressIn: () => setPressed(true),
+        onPressOut: () => setPressed(false),
+      }}
     >
-      <Icon.send />
+      <Icon.send color={pressed ? colors.plum700 : colors.plum500} />
     </Send>
   );
 };
