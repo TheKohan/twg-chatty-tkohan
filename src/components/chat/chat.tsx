@@ -9,6 +9,7 @@ import { UserType } from '@chatty/__generated__/graphql';
 import { ChatBubble } from './chat-bubble';
 import { ChatInput } from './chat-input';
 import { ChatSendButton } from './chat-send-button';
+import { useKeyboardVisible } from '@chatty/hooks';
 
 /**
  * Theres an issue https://github.com/FaridSafi/react-native-gifted-chat/issues/2498
@@ -19,16 +20,15 @@ type ChatProps = {
   roomId: string;
   user?: UserType;
 };
-
+//@TODO: handle error and loading states gracefully
 export const Chat: FC<ChatProps> = ({ roomId, user }) => {
+  const isKeyboardVisible = useKeyboardVisible();
   const { loading, error, data } = useQuery(GET_ROOM, {
     variables: { id: roomId },
     pollInterval: 1000,
   });
-
   const [sendMessageToRoom, { error: sendMessageError }] =
     useMutation(SEND_MESSAGE);
-
   const [messages, setMessages] = useState(
     mapToGiftedMessages(
       (data?.room?.messages ?? []).filter(message => message != null)
@@ -56,7 +56,7 @@ export const Chat: FC<ChatProps> = ({ roomId, user }) => {
         },
       });
     }
-    /** TODO send via api */
+
     setMessages(previousMessages =>
       GiftedChat.append(previousMessages, messages)
     );
@@ -72,8 +72,10 @@ export const Chat: FC<ChatProps> = ({ roomId, user }) => {
       renderBubble={props => <ChatBubble {...props} />}
       // isTyping={}
       // onInputTextChanged={}
-      alignTop={true}
       bottomOffset={-30}
+      messagesContainerStyle={{
+        paddingBottom: !isKeyboardVisible ? 52 : undefined,
+      }}
       renderMessageImage={() => <Icon.profile width={40} height={40} />}
       renderInputToolbar={props => <ChatInput {...props} />}
       renderSend={props => <ChatSendButton {...props} />}
