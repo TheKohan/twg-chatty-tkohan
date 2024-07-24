@@ -8,13 +8,14 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const App = () => {
   return (
-    <Stack.Navigator initialRouteName='Rooms'>
-      <Stack.Screen
-        options={{ header: Header }}
-        name='Rooms'
-        component={Rooms}
-      />
-      <Stack.Screen options={{ header: Header }} name='Room' component={Room} />
+    <Stack.Navigator
+      screenOptions={{
+        header: Header,
+      }}
+      initialRouteName='Rooms'
+    >
+      <Stack.Screen name='Rooms' component={Rooms} />
+      <Stack.Screen name='Room' component={Room} />
     </Stack.Navigator>
   );
 };

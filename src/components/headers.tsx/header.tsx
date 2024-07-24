@@ -17,49 +17,54 @@ export const Header: FC<NativeStackHeaderProps> = ({
   const routeName = route.name as keyof RootStackParamList;
   const roomParams =
     routeName === 'Room' ? (route.params as RootStackParamList['Room']) : null;
-
   return (
-    <View style={[headerStyles.container, { paddingTop: insets.top }]}>
-      <View style={headerStyles.contentContainer}>
-        <View style={headerStyles.leftContainer}>
-          {back ? (
-            <Button variant='icon' icon='back' onPress={navigation.goBack} />
-          ) : (
-            <Typography variant='h1' color='plum500'>
-              {route.name}
-            </Typography>
-          )}
-          {roomParams && (
-            <View style={headerStyles.roomInfoContainer}>
-              <Icon.profile width={44} height={44} />
-              <View style={headerStyles.textContainer}>
-                <Typography
-                  numberOfLines={1}
-                  ellipsizeMode='tail'
-                  variant='h4-header'
-                  color='plum500'
-                >
-                  {roomParams.roomName}
-                </Typography>
-                <Typography variant='bodyText' color='white'>
-                  Active now
-                </Typography>
+    <View
+      style={{
+        backgroundColor: colors.blue100,
+      }}
+    >
+      <View style={[headerStyles.container, { paddingTop: insets.top }]}>
+        <View style={headerStyles.contentContainer}>
+          <View style={headerStyles.leftContainer}>
+            {back ? (
+              <Button variant='icon' icon='back' onPress={navigation.goBack} />
+            ) : (
+              <Typography variant='h1' color='plum500'>
+                {route.name}
+              </Typography>
+            )}
+            {roomParams && (
+              <View style={headerStyles.roomInfoContainer}>
+                <Icon.profile width={44} height={44} />
+                <View style={headerStyles.textContainer}>
+                  <Typography
+                    numberOfLines={1}
+                    ellipsizeMode='tail'
+                    variant='h4-header'
+                    color='plum500'
+                  >
+                    {roomParams.roomName}
+                  </Typography>
+                  <Typography variant='bodyText' color='white'>
+                    Active now
+                  </Typography>
+                </View>
               </View>
-            </View>
-          )}
-        </View>
-        <View style={headerStyles.iconContainer}>
-          {roomParams ? (
-            <>
-              <Icon.phone />
-              <Icon.videocall />
-            </>
-          ) : (
-            <>
-              <Icon.search />
-              <Icon.rooms />
-            </>
-          )}
+            )}
+          </View>
+          <View style={headerStyles.iconContainer}>
+            {roomParams ? (
+              <>
+                <Icon.phone />
+                <Icon.videocall />
+              </>
+            ) : (
+              <>
+                <Icon.search />
+                <Icon.rooms />
+              </>
+            )}
+          </View>
         </View>
       </View>
     </View>
