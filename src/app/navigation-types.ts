@@ -3,14 +3,18 @@ import type { RouteProp } from '@react-navigation/native';
 
 export type RootStackParamList = {
   Rooms: undefined;
-  Room: { roomId: string };
+  Room: { roomId: number };
 };
 
 export type RoomsNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   'Room'
 >;
+export type RoomNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'Rooms'
+>;
 
 export type RoomsRouteProp = RouteProp<RootStackParamList, 'Rooms'>;
 
-export type RoomRouteProp = RouteProp<RootStackParamList, 'Rooms'>;
+export type RoomRouteProp = RouteProp<RootStackParamList, 'Room'>;
