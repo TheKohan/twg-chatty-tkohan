@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { RoomsNavigationProp } from '@chatty/types';
 import { Button } from '@chatty/components';
-import { GET_ROOMS } from '@chatty/grapql';
+import { GET_ROOMS } from '@chatty/graphql';
 import { useNavigation } from '@react-navigation/native';
 import { Text, View } from 'react-native';
 
