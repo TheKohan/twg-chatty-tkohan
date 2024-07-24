@@ -37,8 +37,8 @@ export const Button: React.FC<ButtonProps> = props => {
   return (
     <BaseButton
       {...rest}
-      iconColor={variant === 'primary' ? 'white' : 'plum700'}
-      iconColorPressed={variant === 'primary' ? 'white' : 'plum500'}
+      iconColor={variant === 'primary' ? 'white' : 'plum500'}
+      iconColorPressed={variant === 'primary' ? 'white' : 'plum700'}
       containerStyle={styles[variant]}
       containerStylePressed={pressedStyles[variant]}
     />

@@ -1,7 +1,7 @@
 import { Pressable, View, ViewStyle } from 'react-native';
 import { Icon, IconVariant } from '../icon';
 import { Typography } from '../typography';
-import { ColorVariant } from '@chatty/theme';
+import { colors, ColorVariant } from '@chatty/theme';
 import { useState } from 'react';
 
 export type BaseButtonProps = {
@@ -21,8 +21,8 @@ export const BaseButton: React.FC<BaseButtonProps> = ({
   onPress,
   icon,
   iconPosition = 'left',
-  iconColor,
-  iconColorPressed,
+  iconColor = 'black',
+  iconColorPressed = 'black',
   disabled = false,
   containerStyle = {},
   containerStylePressed = {},
@@ -44,16 +44,20 @@ export const BaseButton: React.FC<BaseButtonProps> = ({
       onPress={onPress}
     >
       {icon && iconPosition === 'left' && ButtonIcon && (
-        <View style={{ paddingRight: 8 }}>
-          <ButtonIcon color={iconColor} />
+        <View style={label ? { paddingRight: 8 } : {}}>
+          <ButtonIcon
+            color={isPressed ? colors[iconColor] : colors[iconColorPressed]}
+          />
         </View>
       )}
-      <Typography
-        color={isPressed ? iconColor : iconColorPressed}
-        variant='button'
-      >
-        {label}
-      </Typography>
+      {label ? (
+        <Typography
+          color={isPressed ? iconColor : iconColorPressed}
+          variant='button'
+        >
+          {label}
+        </Typography>
+      ) : null}
       {icon && iconPosition === 'right' && ButtonIcon && (
         <View style={{ paddingLeft: 8 }}>
           <ButtonIcon color={iconColor} />

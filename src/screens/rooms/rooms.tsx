@@ -1,9 +1,9 @@
 import { useQuery } from '@apollo/client';
 import { RoomsNavigationProp } from '@chatty/types';
-import { Button, Icon, Typography } from '@chatty/components';
+import { Icon, Typography } from '@chatty/components';
 import { GET_ALL_ROOMS, GET_ROOM } from '@chatty/graphql';
 import { useNavigation } from '@react-navigation/native';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { RoomsType, SingleRoomType } from '@chatty/__generated__/graphql';
 import { timeAgo } from '@chatty/utils';
 import { borders, colors } from '@chatty/theme';
@@ -14,7 +14,14 @@ export const Rooms = () => {
   });
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.blue100 }}>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: colors.blue100,
+        paddingTop: 36,
+        paddingHorizontal: 8,
+      }}
+    >
       {loading && <Text>Loading...</Text>}
       {error && <Text>Error!</Text>}
       {data?.usersRooms && <RoomList userRooms={data.usersRooms} />}
@@ -24,13 +31,12 @@ export const Rooms = () => {
 
 const RoomList: React.FC<{ userRooms: RoomsType }> = ({ userRooms }) => {
   return (
-    <View style={{ flex: 1, gap: 8, padding: 8 }}>
-      {userRooms.rooms?.map(room => {
-        if (!room) return null;
-
-        return room.id && <RoomItem key={room.id} room={room} />;
-      })}
-    </View>
+    <FlatList
+      data={userRooms.rooms}
+      keyExtractor={room => room?.id ?? ''}
+      contentContainerStyle={{ gap: 12 }}
+      renderItem={({ item }) => (item ? <RoomItem room={item} /> : null)}
+    />
   );
 };
 
@@ -45,7 +51,12 @@ const RoomItem: React.FC<{ room: SingleRoomType }> = ({ room }) => {
   const dateAgo = new Date(data?.room?.messages?.[0]?.insertedAt ?? '');
 
   return (
-    <Pressable onPress={() => navigate('Room', { roomId: room.id ?? '' })}>
+    <Pressable
+      style={({ pressed }) => (pressed ? { elevation: 3 } : {})}
+      onPress={() =>
+        navigate('Room', { roomId: room.id ?? '', roomName: room.name ?? '' })
+      }
+    >
       <View style={styles.roomItemContainer}>
         <Icon.profile />
         <RoomItemActivityDisplay dateAgo={dateAgo} />

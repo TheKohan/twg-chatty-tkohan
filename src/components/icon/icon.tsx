@@ -7,6 +7,7 @@ import Videocall from '../../../assets/icons/videocall.svg';
 import Vision from '../../../assets/icons/vision.svg';
 import VisionLow from '../../../assets/icons/vision-low.svg';
 import Rooms from '../../../assets/icons/rooms.svg';
+import Back from '../../../assets/icons/back.svg';
 
 export const Icon = {
   phone: Phone,
@@ -18,6 +19,7 @@ export const Icon = {
   vision: Vision,
   visionLow: VisionLow,
   rooms: Rooms,
+  back: Back,
 } as const;
 
 export type IconVariant = keyof typeof Icon;
