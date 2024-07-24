@@ -10,9 +10,11 @@ import * as SecureStorage from 'expo-secure-store';
 import { UserType } from '@chatty/__generated__/graphql';
 import { useMutation, useQuery } from '@apollo/client';
 import { REGISTER_USER, LOGIN_USER, GET_CURRENT_USER } from '@chatty/graphql';
+import { set } from 'react-hook-form';
 
 type AuthContextType = {
   user?: UserType;
+  token?: string;
   loading: boolean;
   error?: string;
   login: (email: string, password: string) => Promise<void>;
@@ -36,6 +38,7 @@ export const useAuth = () => {
 
 export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const [user, setUser] = useState<UserType | undefined>(undefined);
+  const [token, setToken] = useState<string | undefined>(undefined);
 
   const {
     loading: userLoading,
@@ -67,6 +70,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     if (data && data.loginUser && data.loginUser.token) {
       await SecureStorage.setItemAsync('token', data.loginUser.token);
       setUser(data.loginUser.user ?? undefined);
+      setToken(data.loginUser.token);
     } else {
       throw new Error('Login failed');
     }
@@ -96,6 +100,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     <AuthContext.Provider
       value={{
         user,
+        token,
         loading: signUpLoading || loginLoading || userLoading,
         error:
           signUpError?.message || loginError?.message || userError?.message,
