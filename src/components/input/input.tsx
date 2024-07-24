@@ -82,6 +82,8 @@ export const Input: React.FC<InputProps> = ({
                 onFocus={handleFocus}
                 onBlur={handleBlur}
                 value={value}
+                autoCorrect={false}
+                autoCapitalize='none'
                 secureTextEntry={secureTextEntry && !isPasswordVisible}
                 clearButtonMode={!secureTextEntry ? 'while-editing' : 'never'}
                 {...inputProps}

@@ -65,6 +65,12 @@ export const typography = {
     fontSize: 12,
     lineHeight: 16,
   },
+  'captionText-underline': {
+    fontFamily: 'SF-Compact-Display-Bold',
+    fontSize: 12,
+    lineHeight: 16,
+    textDecorationLine: 'underline',
+  },
   specialText: {
     fontFamily: 'SF-Compact-Display-Regular',
     fontSize: 12,
