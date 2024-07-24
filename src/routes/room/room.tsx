@@ -1,4 +1,4 @@
-import { RoomNavigationProp, RoomRouteProp } from '@chatty/app';
+import { RoomNavigationProp, RoomRouteProp } from '@chatty/types';
 import { Button } from '@chatty/components';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Text, View } from 'react-native';
