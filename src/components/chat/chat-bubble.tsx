@@ -1,4 +1,4 @@
-import { colors } from '@chatty/theme';
+import { borders, colors } from '@chatty/theme';
 import { FC } from 'react';
 import { BubbleProps, IMessage, Bubble } from 'react-native-gifted-chat';
 
@@ -11,14 +11,21 @@ export const ChatBubble: FC<Readonly<BubbleProps<IMessage>>> = props => {
         right: { color: colors.white },
       }}
       renderTime={() => null}
+      containerStyle={{
+        left: { paddingBottom: 8, paddingLeft: 16 },
+        right: { paddingBottom: 8, paddingRight: 16 },
+      }}
       wrapperStyle={{
         left: {
-          padding: 4,
+          padding: 8,
           backgroundColor: colors.white,
+          borderRadius: borders.sm,
           borderBottomLeftRadius: 0,
         },
         right: {
+          padding: 8,
           backgroundColor: colors.plum300,
+          borderRadius: borders.sm,
           borderBottomRightRadius: 0,
         },
       }}

@@ -1,20 +1,23 @@
-import { Text } from 'react-native';
-import React, { FC, useCallback, useState } from 'react';
+import { Text, View } from 'react-native';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { GiftedChat, IMessage } from 'react-native-gifted-chat';
 import { useMutation, useQuery, useSubscription } from '@apollo/client';
 import {
   GET_ROOM,
+  MESSAGE_ADDED,
   SEND_MESSAGE,
   SET_TYPING_USER,
   TYPING_USER,
 } from '@chatty/graphql';
 import { mapToGiftedMessages, mapUserToGifted } from '@chatty/utils';
 import { Icon } from '../icon';
-import { UserType } from '@chatty/__generated__/graphql';
+import { Message, UserType } from '@chatty/__generated__/graphql';
 import { ChatBubble } from './chat-bubble';
 import { ChatInput } from './chat-input';
 import { ChatSendButton } from './chat-send-button';
 import { useKeyboardVisible } from '@chatty/hooks';
+import { colors } from '@chatty/theme';
+import { TypingIndicator } from './chat-typing-indicator';
 
 /**
  * Theres an issue https://github.com/FaridSafi/react-native-gifted-chat/issues/2498
@@ -28,6 +31,7 @@ type ChatProps = {
 
 //@TODO: handle error and loading states gracefully
 export const Chat: FC<ChatProps> = ({ roomId, user }) => {
+  const [isTyping, setIsTyping] = useState(false);
   const isKeyboardVisible = useKeyboardVisible();
   const { loading, error, data } = useQuery(GET_ROOM, {
     variables: { id: roomId },
@@ -39,22 +43,24 @@ export const Chat: FC<ChatProps> = ({ roomId, user }) => {
     loading: subLoading,
   } = useSubscription(TYPING_USER, {
     variables: { roomId },
+    fetchPolicy: 'network-only',
   });
 
-  const [setTypingUser, { data: typingUserDD }] = useMutation(SET_TYPING_USER);
+  const { data: messageAddedData } = useSubscription(MESSAGE_ADDED, {
+    variables: { roomId },
+    fetchPolicy: 'network-only',
+  });
+
+  const [setTypingUser] = useMutation(SET_TYPING_USER);
 
   const [sendMessageToRoom, { error: sendMessageError }] =
     useMutation(SEND_MESSAGE);
+
   const [messages, setMessages] = useState(
     mapToGiftedMessages(
       (data?.room?.messages ?? []).filter(message => message != null)
     )
   );
-
-  console.log('Im sending Typing' + typingUserDD);
-  console.log('Sub User Data', typingUserData);
-  console.log('subLoading', subLoading);
-  console.log('subErr', subErr);
 
   if (loading) {
     return <Text>Loading...</Text>;
@@ -68,6 +74,24 @@ export const Chat: FC<ChatProps> = ({ roomId, user }) => {
     return <Text>Room not found!</Text>;
   }
 
+  useEffect(() => {
+    if (!typingUserData) return;
+    setIsTyping(true);
+    const timeout = setTimeout(() => {
+      setIsTyping(false);
+    }, 3000);
+    return () => clearTimeout(timeout);
+  }, [typingUserData]);
+
+  useEffect(() => {
+    if (!messageAddedData || !messageAddedData.messageAdded) return;
+    const newMessage = messageAddedData.messageAdded as Message;
+    console.log('new message', newMessage);
+    setMessages(previousMessages =>
+      GiftedChat.append(previousMessages, mapToGiftedMessages([newMessage]))
+    );
+  }, [messageAddedData]);
+
   const onSend = useCallback(async (messages: IMessage[] = []) => {
     for (const message of messages) {
       await sendMessageToRoom({
@@ -77,32 +101,34 @@ export const Chat: FC<ChatProps> = ({ roomId, user }) => {
         },
       });
     }
-
-    setMessages(previousMessages =>
-      GiftedChat.append(previousMessages, messages)
-    );
   }, []);
 
   return (
-    <GiftedChat
-      messages={messages}
-      inverted={true}
-      user={data.room.user ? mapUserToGifted(user) : undefined}
-      onSend={onSend}
-      placeholder=''
-      renderBubble={props => <ChatBubble {...props} />}
-      isTyping={!!typingUserData}
-      renderChatFooter={() => (typingUserData ? <Text>Typing...</Text> : null)}
-      onInputTextChanged={async () => {
-        await setTypingUser({ variables: { roomId } });
-      }}
-      bottomOffset={-30}
-      messagesContainerStyle={{
-        paddingBottom: !isKeyboardVisible ? 52 : undefined,
-      }}
-      renderMessageImage={() => <Icon.profile width={40} height={40} />}
-      renderInputToolbar={props => <ChatInput {...props} />}
-      renderSend={props => <ChatSendButton {...props} />}
-    />
+    <View style={{ flex: 1, backgroundColor: colors.blue100 }}>
+      <GiftedChat
+        messages={messages}
+        inverted={true}
+        user={data.room.user ? mapUserToGifted(user) : undefined}
+        onSend={onSend}
+        placeholder=''
+        renderFooter={() => isTyping && <TypingIndicator />}
+        renderBubble={props => <ChatBubble {...props} />}
+        isTyping={isTyping}
+        onInputTextChanged={async message => {
+          if (!message) return;
+          console.log('setting typing user', roomId);
+          await setTypingUser({ variables: { roomId } });
+        }}
+        bottomOffset={-30}
+        messagesContainerStyle={{
+          paddingBottom: !isKeyboardVisible ? 52 : undefined,
+        }}
+        renderMessageImage={() => <Icon.profile width={40} height={40} />}
+        renderInputToolbar={props => <ChatInput {...props} />}
+        renderSend={props => <ChatSendButton {...props} />}
+        renderDay={() => <View />}
+        renderAvatar={null}
+      />
+    </View>
   );
 };
