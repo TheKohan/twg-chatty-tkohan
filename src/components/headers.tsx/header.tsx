@@ -1,6 +1,6 @@
 import { NativeStackHeaderProps } from '@react-navigation/native-stack';
 import { FC } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Icon } from '../icon';
 import { Typography } from '../typography';
@@ -8,6 +8,7 @@ import { RootStackParamList } from '@chatty/types';
 import { colors, borders } from '@chatty/theme';
 import { Button } from '../button';
 import { useAuth } from '@chatty/context';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 export const Header: FC<NativeStackHeaderProps> = ({
   route,
@@ -63,7 +64,20 @@ export const Header: FC<NativeStackHeaderProps> = ({
               </>
             ) : (
               <>
-                <Button variant='icon' icon='back' onPress={logout} />
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: colors.white,
+                    borderRadius: 100,
+                    padding: 8,
+                  }}
+                  onPress={logout}
+                >
+                  <Ionicons
+                    name='log-out-outline'
+                    size={30}
+                    color={colors.plum500}
+                  />
+                </TouchableOpacity>
                 <Icon.search />
                 <Icon.rooms />
               </>

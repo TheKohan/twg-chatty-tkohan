@@ -64,7 +64,7 @@ export const SignUp: FC = () => {
           <Typography variant='h1' color='plum500'>
             Create account
           </Typography>
-          <View style={{ paddingHorizontal: 12, gap: 16 }}>
+          <View style={{ paddingHorizontal: 12, gap: 8 }}>
             <Input
               control={control}
               name='email'

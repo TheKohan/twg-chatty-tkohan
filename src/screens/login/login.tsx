@@ -54,7 +54,7 @@ export const Login: FC = () => {
           <Typography variant='h2' color='white'>
             Log in and stay in touch with everyone!
           </Typography>
-          <View style={{ paddingHorizontal: 12, gap: 16 }}>
+          <View style={{ paddingHorizontal: 12, gap: 8 }}>
             <Input
               control={control}
               name='email'
