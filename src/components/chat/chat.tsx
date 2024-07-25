@@ -1,8 +1,13 @@
 import { Text } from 'react-native';
 import React, { FC, useCallback, useState } from 'react';
 import { GiftedChat, IMessage } from 'react-native-gifted-chat';
-import { useMutation, useQuery } from '@apollo/client';
-import { GET_ROOM, SEND_MESSAGE } from '@chatty/graphql';
+import { useMutation, useQuery, useSubscription } from '@apollo/client';
+import {
+  GET_ROOM,
+  SEND_MESSAGE,
+  SET_TYPING_USER,
+  TYPING_USER,
+} from '@chatty/graphql';
 import { mapToGiftedMessages, mapUserToGifted } from '@chatty/utils';
 import { Icon } from '../icon';
 import { UserType } from '@chatty/__generated__/graphql';
@@ -20,13 +25,24 @@ type ChatProps = {
   roomId: string;
   user?: UserType;
 };
+
 //@TODO: handle error and loading states gracefully
 export const Chat: FC<ChatProps> = ({ roomId, user }) => {
   const isKeyboardVisible = useKeyboardVisible();
   const { loading, error, data } = useQuery(GET_ROOM, {
     variables: { id: roomId },
-    pollInterval: 1000,
   });
+
+  const {
+    data: typingUserData,
+    error: subErr,
+    loading: subLoading,
+  } = useSubscription(TYPING_USER, {
+    variables: { roomId },
+  });
+
+  const [setTypingUser, { data: typingUserDD }] = useMutation(SET_TYPING_USER);
+
   const [sendMessageToRoom, { error: sendMessageError }] =
     useMutation(SEND_MESSAGE);
   const [messages, setMessages] = useState(
@@ -34,6 +50,11 @@ export const Chat: FC<ChatProps> = ({ roomId, user }) => {
       (data?.room?.messages ?? []).filter(message => message != null)
     )
   );
+
+  console.log('Im sending Typing' + typingUserDD);
+  console.log('Sub User Data', typingUserData);
+  console.log('subLoading', subLoading);
+  console.log('subErr', subErr);
 
   if (loading) {
     return <Text>Loading...</Text>;
@@ -70,8 +91,11 @@ export const Chat: FC<ChatProps> = ({ roomId, user }) => {
       onSend={onSend}
       placeholder=''
       renderBubble={props => <ChatBubble {...props} />}
-      // isTyping={}
-      // onInputTextChanged={}
+      isTyping={!!typingUserData}
+      renderChatFooter={() => (typingUserData ? <Text>Typing...</Text> : null)}
+      onInputTextChanged={async () => {
+        await setTypingUser({ variables: { roomId } });
+      }}
       bottomOffset={-30}
       messagesContainerStyle={{
         paddingBottom: !isKeyboardVisible ? 52 : undefined,

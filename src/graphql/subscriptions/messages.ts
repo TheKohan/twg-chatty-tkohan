@@ -1,8 +1,8 @@
 import { graphql } from '../../__generated__/gql';
 
-export const SEND_MESSAGE = graphql(`
-  mutation SendMessage($roomId: String!, $body: String!) {
-    sendMessage(roomId: $roomId, body: $body) {
+export const MESSAGE_ADDED = graphql(`
+  subscription MessageAdded($roomId: String!) {
+    messageAdded(roomId: $roomId) {
       id
       body
       insertedAt
@@ -17,13 +17,13 @@ export const SEND_MESSAGE = graphql(`
   }
 `);
 
-export const SET_TYPING_USER = graphql(`
-  mutation TypingUser($roomId: String!) {
+export const TYPING_USER = graphql(`
+  subscription XTypingUser($roomId: String!) {
     typingUser(roomId: $roomId) {
+      id
       email
       firstName
       lastName
-      id
       role
     }
   }

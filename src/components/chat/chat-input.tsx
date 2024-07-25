@@ -19,6 +19,8 @@ export const ChatInput: FC<InputToolbarProps<IMessage>> = props => {
       {...composerProps}
       textInputProps={{
         ...composerProps.textInputProps,
+        autoCorrect: false,
+        autoCapitalize: 'none',
         onFocus: e => {
           setIsFocused(true);
           composerProps.textInputProps?.onFocus?.(e);
