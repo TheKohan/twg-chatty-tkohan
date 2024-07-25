@@ -4,7 +4,14 @@ import { RoomsNavigationProp } from '@chatty/types';
 import { useNavigation } from '@react-navigation/native';
 import { FC } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '@chatty/context';
 
@@ -28,54 +35,61 @@ export const Login: FC = () => {
   };
 
   return (
-    <View
-      style={[
-        styles.container,
-        { paddingTop: insets.top + 36, paddingBottom: insets.bottom },
-      ]}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+      keyboardVerticalOffset={-insets.bottom}
     >
-      <View style={{ paddingHorizontal: 16, gap: 32 }}>
-        <Typography variant='h1' color='plum500'>
-          Welcome Back
-        </Typography>
-        <Typography variant='h2' color='white'>
-          Log in and stay in touch with everyone!
-        </Typography>
-        <View style={{ paddingHorizontal: 12, gap: 16 }}>
-          <Input
-            control={control}
-            name='email'
-            label='email-address'
-            defaultValue='barbara.sabich@mail.com'
-            rules={{
-              required: 'Email is required',
-              pattern: { value: /^\S+@\S+$/i, message: 'Invalid email' },
-            }}
-            keyboardType='email-address'
-          />
-          <Input
-            control={control}
-            name='password'
-            defaultValue='qsiyRk4PNLfGLbC'
-            label='Password'
-            rules={{
-              required: 'Password is required',
-              minLength: {
-                value: 6,
-                message: 'Password must be at least 6 characters',
-              },
-            }}
-            secureTextEntry
-          />
-          {loading && <Loader />}
-          {error && (
-            <Typography variant='specialText' color='error'>
-              Something went wrong, please try again {error}
-            </Typography>
-          )}
+      <ScrollView
+        contentContainerStyle={[
+          styles.scrollViewContent,
+          { paddingTop: insets.top + 36 },
+        ]}
+        keyboardShouldPersistTaps='handled'
+      >
+        <View style={{ paddingHorizontal: 16, gap: 32 }}>
+          <Typography variant='h1' color='plum500'>
+            Welcome Back
+          </Typography>
+          <Typography variant='h2' color='white'>
+            Log in and stay in touch with everyone!
+          </Typography>
+          <View style={{ paddingHorizontal: 12, gap: 16 }}>
+            <Input
+              control={control}
+              name='email'
+              label='email-address'
+              defaultValue='barbara.sabich@mail.com'
+              rules={{
+                required: 'Email is required',
+                pattern: { value: /^\S+@\S+$/i, message: 'Invalid email' },
+              }}
+              keyboardType='email-address'
+            />
+            <Input
+              control={control}
+              name='password'
+              defaultValue='qsiyRk4PNLfGLbC'
+              label='Password'
+              rules={{
+                required: 'Password is required',
+                minLength: {
+                  value: 6,
+                  message: 'Password must be at least 6 characters',
+                },
+              }}
+              secureTextEntry
+            />
+            {loading && <Loader />}
+            {error && (
+              <Typography variant='specialText' color='error'>
+                Something went wrong, please try again {error}
+              </Typography>
+            )}
+          </View>
         </View>
-      </View>
-      <View style={styles.bottomContainer}>
+      </ScrollView>
+      <View style={[styles.bottomContainer, { paddingBottom: insets.bottom }]}>
         <Button
           variant='primary'
           label='Log in'
@@ -93,19 +107,23 @@ export const Login: FC = () => {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-between',
     backgroundColor: colors.blue300,
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
   },
   bottomContainer: {
     gap: 16,
     paddingHorizontal: 16,
+    bottom: 12,
   },
   signUpContainer: {
     flexDirection: 'row',
