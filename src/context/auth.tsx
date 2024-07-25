@@ -65,6 +65,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
       if (user) return;
       const token = await SecureStorage.getItemAsync('userToken');
       if (token) {
+        console.log('REFETCHING USER');
         const userData = await refetchUser();
         setUser(userData.data?.user ?? undefined);
       }
@@ -80,6 +81,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     if (data && data.loginUser && data.loginUser.token) {
       await SecureStorage.setItemAsync('token', data.loginUser.token);
       setUser(data.loginUser.user ?? undefined);
+      await client.resetStore();
     } else {
       throw new Error('Login failed');
     }
@@ -101,9 +103,8 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   };
 
   const logout = async () => {
-    await SecureStorage.deleteItemAsync('token');
-    client.resetStore();
     setUser(undefined);
+    await SecureStorage.deleteItemAsync('token');
   };
 
   return (
