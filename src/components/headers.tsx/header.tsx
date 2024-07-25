@@ -1,14 +1,14 @@
 import { NativeStackHeaderProps } from '@react-navigation/native-stack';
 import { FC } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Icon } from '../icon';
-import { Typography } from '../typography';
 import { RootStackParamList } from '@chatty/types';
 import { colors, borders } from '@chatty/theme';
-import { Button } from '../button';
 import { useAuth } from '@chatty/context';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { HeaderLeft } from './header-left';
+import { HeaderRight } from './header-right';
+
+export type RoomParams = RootStackParamList['Room'];
 
 export const Header: FC<NativeStackHeaderProps> = ({
   route,
@@ -19,77 +19,29 @@ export const Header: FC<NativeStackHeaderProps> = ({
   const { logout } = useAuth();
 
   const routeName = route.name as keyof RootStackParamList;
-  const roomParams =
-    routeName === 'Room' ? (route.params as RootStackParamList['Room']) : null;
+  const roomParams = routeName === 'Room' ? (route.params as RoomParams) : null;
+
   return (
-    <View
-      style={{
-        backgroundColor: colors.blue100,
-      }}
-    >
-      <View style={[headerStyles.container, { paddingTop: insets.top }]}>
-        <View style={headerStyles.contentContainer}>
-          <View style={headerStyles.leftContainer}>
-            {back ? (
-              <Button variant='icon' icon='back' onPress={navigation.goBack} />
-            ) : (
-              <Typography variant='h1' color='plum500'>
-                {route.name}
-              </Typography>
-            )}
-            {roomParams && (
-              <View style={headerStyles.roomInfoContainer}>
-                <Icon.profile width={44} height={44} />
-                <View style={headerStyles.textContainer}>
-                  <Typography
-                    numberOfLines={1}
-                    ellipsizeMode='tail'
-                    variant='h4-header'
-                    color='plum500'
-                  >
-                    {roomParams.roomName}
-                  </Typography>
-                  <Typography variant='bodyText' color='white'>
-                    Active now
-                  </Typography>
-                </View>
-              </View>
-            )}
-          </View>
-          <View style={headerStyles.iconContainer}>
-            {roomParams ? (
-              <>
-                <Icon.phone />
-                <Icon.videocall />
-              </>
-            ) : (
-              <>
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: colors.white,
-                    borderRadius: 100,
-                    padding: 8,
-                  }}
-                  onPress={logout}
-                >
-                  <Ionicons
-                    name='log-out-outline'
-                    size={30}
-                    color={colors.plum500}
-                  />
-                </TouchableOpacity>
-                <Icon.search />
-                <Icon.rooms />
-              </>
-            )}
-          </View>
+    <View style={styles.wrapper}>
+      <View style={[styles.container, { paddingTop: insets.top }]}>
+        <View style={styles.contentContainer}>
+          <HeaderLeft
+            routeName={routeName}
+            roomParams={roomParams}
+            back={!!back}
+            onBack={navigation.goBack}
+          />
+          <HeaderRight roomParams={roomParams} onLogout={logout} />
         </View>
       </View>
     </View>
   );
 };
 
-export const headerStyles = StyleSheet.create({
+const styles = StyleSheet.create({
+  wrapper: {
+    backgroundColor: colors.blue100,
+  },
   container: {
     backgroundColor: colors.blue300,
     borderBottomRightRadius: borders.lg,
@@ -100,26 +52,5 @@ export const headerStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 12,
-  },
-  leftContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginRight: 8, // Add some margin to separate from icons
-  },
-  roomInfoContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-    marginLeft: 8,
-  },
-  textContainer: {
-    flex: 1,
-    marginLeft: 8,
-  },
-  iconContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
   },
 });
