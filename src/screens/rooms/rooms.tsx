@@ -1,17 +1,14 @@
-import { useQuery } from '@apollo/client';
 import { RoomsNavigationProp } from '@chatty/types';
 import { Icon, Typography } from '@chatty/components';
-import { GET_ALL_ROOMS, GET_ROOM } from '@chatty/graphql';
 import { useNavigation } from '@react-navigation/native';
 import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { RoomsType, SingleRoomType } from '@chatty/__generated__/graphql';
 import { timeAgo } from '@chatty/utils';
 import { borders, colors } from '@chatty/theme';
+import { useGetRoom, useGetRooms } from '@chatty/hooks';
 
 export const Rooms = () => {
-  const { loading, error, data } = useQuery(GET_ALL_ROOMS, {
-    pollInterval: 1000 * 10,
-  });
+  const { loading, error, data } = useGetRooms();
 
   return (
     <View
@@ -41,10 +38,7 @@ const RoomList: React.FC<{ userRooms: RoomsType }> = ({ userRooms }) => {
 // TODO refactor all of this
 const RoomItem: React.FC<{ room: SingleRoomType }> = ({ room }) => {
   const { navigate } = useNavigation<RoomsNavigationProp>();
-  const { loading, data, error } = useQuery(GET_ROOM, {
-    variables: { id: room.id ?? '' },
-    pollInterval: 1000,
-  });
+  const { loading, data, error } = useGetRoom({ roomId: room.id ?? '' });
 
   const lastMessage = data?.room?.messages?.[0]?.body ?? '';
   const dateAgo = new Date(data?.room?.messages?.[0]?.insertedAt ?? '');

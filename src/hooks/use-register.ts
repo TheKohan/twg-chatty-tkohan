@@ -1,21 +1,7 @@
-import { graphql } from '../../__generated__/gql';
+import { useMutation } from '@apollo/client';
+import { graphql } from '@chatty/__generated__/gql';
 
-export const LOGIN_USER = graphql(`
-  mutation LoginUser($email: String!, $password: String!) {
-    loginUser(email: $email, password: $password) {
-      token
-      user {
-        email
-        firstName
-        id
-        lastName
-        role
-      }
-    }
-  }
-`);
-
-export const REGISTER_USER = graphql(`
+const REGISTER_USER = graphql(`
   mutation RegisterUser(
     $email: String!
     $firstName: String!
@@ -38,3 +24,7 @@ export const REGISTER_USER = graphql(`
     }
   }
 `);
+
+export const useRegister = () => {
+  return useMutation(REGISTER_USER);
+};

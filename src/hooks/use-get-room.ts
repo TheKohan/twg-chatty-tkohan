@@ -1,22 +1,5 @@
-import { graphql } from '../../__generated__/gql';
-
-export const GET_ALL_ROOMS = graphql(`
-  query GetAllRooms {
-    usersRooms {
-      user {
-        email
-        firstName
-        lastName
-        id
-        role
-      }
-      rooms {
-        id
-        name
-      }
-    }
-  }
-`);
+import { useQuery } from '@apollo/client';
+import { graphql } from '@chatty/__generated__/gql';
 
 export const GET_ROOM = graphql(`
   query GetRoom($id: ID!) {
@@ -45,3 +28,10 @@ export const GET_ROOM = graphql(`
     }
   }
 `);
+
+export const useGetRoom = ({ roomId }: { roomId: string }) => {
+  return useQuery(GET_ROOM, {
+    variables: { id: roomId },
+    pollInterval: 1000 * 3,
+  });
+};

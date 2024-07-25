@@ -9,8 +9,8 @@ import React, {
 import * as SecureStorage from 'expo-secure-store';
 import { UserType } from '@chatty/__generated__/graphql';
 import { useMutation, useQuery } from '@apollo/client';
-import { REGISTER_USER, LOGIN_USER, GET_CURRENT_USER } from '@chatty/graphql';
 import { AUTH_TOKEN_KEY, env } from '@chatty/utils';
+import { useGetUser, useLogin, useRegister } from '@chatty/hooks';
 
 type LoginData = {
   email: string;
@@ -49,15 +49,11 @@ export const useAuth = () => {
 export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const [user, setUser] = useState<UserType | undefined>(undefined);
 
-  const {
-    loading: userLoading,
-    client,
-    refetch: refetchUser,
-  } = useQuery(GET_CURRENT_USER);
+  const { loading: userLoading, client, refetch: refetchUser } = useGetUser();
   const [signUpMutation, { loading: signUpLoading, error: signUpError }] =
-    useMutation(REGISTER_USER);
+    useRegister();
   const [loginUserMutation, { loading: loginLoading, error: loginError }] =
-    useMutation(LOGIN_USER);
+    useLogin();
 
   useEffect(() => {
     const checkUserLoggedIn = async () => {

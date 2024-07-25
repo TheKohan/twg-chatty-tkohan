@@ -1,24 +1,22 @@
 import { Text, View } from 'react-native';
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { GiftedChat, IMessage } from 'react-native-gifted-chat';
-import { useMutation, useQuery, useSubscription } from '@apollo/client';
-import {
-  GET_ROOM,
-  MESSAGE_ADDED,
-  SEND_MESSAGE,
-  SET_TYPING_USER,
-  TYPING_USER,
-} from '@chatty/graphql';
 import { mapToGiftedMessages, mapUserToGifted } from '@chatty/utils';
 import { Icon } from '../icon';
 import { Message, UserType } from '@chatty/__generated__/graphql';
 import { ChatBubble } from './chat-bubble';
 import { ChatInput } from './chat-input';
 import { ChatSendButton } from './chat-send-button';
-import { useKeyboardVisible } from '@chatty/hooks';
+import {
+  useGetRoom,
+  useKeyboardVisible,
+  useMessageAddedSubscription,
+  useSendMessage,
+  useSetTyping,
+  useTypingSubscription,
+} from '@chatty/hooks';
 import { colors } from '@chatty/theme';
 import { TypingIndicator } from './chat-typing-indicator';
-
 /**
  * Theres an issue https://github.com/FaridSafi/react-native-gifted-chat/issues/2498
  * with the GiftedChat compability with expo sdk 51, don't have time for now to dig into it, causes warnings
@@ -33,28 +31,19 @@ type ChatProps = {
 export const Chat: FC<ChatProps> = ({ roomId, user }) => {
   const [isTyping, setIsTyping] = useState(false);
   const isKeyboardVisible = useKeyboardVisible();
-  const { loading, error, data } = useQuery(GET_ROOM, {
-    variables: { id: roomId },
-  });
+  const { loading, error, data } = useGetRoom({ roomId });
 
   const {
     data: typingUserData,
     error: subErr,
     loading: subLoading,
-  } = useSubscription(TYPING_USER, {
-    variables: { roomId },
-    fetchPolicy: 'network-only',
-  });
+  } = useTypingSubscription({ roomId });
 
-  const { data: messageAddedData } = useSubscription(MESSAGE_ADDED, {
-    variables: { roomId },
-    fetchPolicy: 'network-only',
-  });
+  const { data: messageAddedData } = useMessageAddedSubscription({ roomId });
 
-  const [setTypingUser] = useMutation(SET_TYPING_USER);
+  const [setTypingUser] = useSetTyping({ roomId });
 
-  const [sendMessageToRoom, { error: sendMessageError }] =
-    useMutation(SEND_MESSAGE);
+  const [sendMessageToRoom, { error: sendMessageError }] = useSendMessage();
 
   const [messages, setMessages] = useState(
     mapToGiftedMessages(

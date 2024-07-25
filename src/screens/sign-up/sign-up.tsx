@@ -1,6 +1,4 @@
-import { useMutation } from '@apollo/client';
 import { Button, Input, Loader, Typography } from '@chatty/components';
-import { LOGIN_USER, REGISTER_USER } from '@chatty/graphql';
 import { colors } from '@chatty/theme';
 import { RoomsNavigationProp } from '@chatty/types';
 import { useNavigation } from '@react-navigation/native';
@@ -16,7 +14,6 @@ import {
   ScrollView,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import * as SecureStore from 'expo-secure-store';
 import { useAuth } from '@chatty/context';
 
 type FormValues = {

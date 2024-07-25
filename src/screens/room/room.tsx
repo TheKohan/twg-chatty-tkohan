@@ -1,7 +1,5 @@
 import { RoomRouteProp } from '@chatty/types';
 import { useRoute } from '@react-navigation/native';
-import { useQuery } from '@apollo/client';
-import { GET_CURRENT_USER } from '@chatty/graphql';
 import { Chat } from '@chatty/components';
 import { useAuth } from '@chatty/context';
 
