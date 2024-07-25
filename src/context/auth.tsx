@@ -47,7 +47,6 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const {
     loading: userLoading,
-    error: userError,
     client,
     refetch: refetchUser,
   } = useQuery(GET_CURRENT_USER);
@@ -55,10 +54,6 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     useMutation(REGISTER_USER);
   const [loginUserMutation, { loading: loginLoading, error: loginError }] =
     useMutation(LOGIN_USER);
-
-  console.log('signUpError', signUpError);
-  console.log('loginError', loginError);
-  console.log('userError', userError);
 
   useEffect(() => {
     const checkUserLoggedIn = async () => {

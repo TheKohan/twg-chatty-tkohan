@@ -6,7 +6,15 @@ import { RoomsNavigationProp } from '@chatty/types';
 import { useNavigation } from '@react-navigation/native';
 import { FC } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
-import { StyleSheet, TouchableOpacity, View, Linking } from 'react-native';
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Linking,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as SecureStore from 'expo-secure-store';
 import { useAuth } from '@chatty/context';
@@ -40,77 +48,84 @@ export const SignUp: FC = () => {
   };
 
   return (
-    <View
-      style={[
-        styles.container,
-        { paddingTop: insets.top + 36, paddingBottom: insets.bottom },
-      ]}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+      keyboardVerticalOffset={-insets.bottom + 12}
     >
-      <View style={{ paddingHorizontal: 16, gap: 32 }}>
-        <Typography variant='h1' color='plum500'>
-          Create account
-        </Typography>
-        <View style={{ paddingHorizontal: 12, gap: 16 }}>
-          <Input
-            control={control}
-            name='email'
-            label='e-mail address'
-            rules={{
-              required: 'Email is required',
-              pattern: { value: /^\S+@\S+$/i, message: 'Invalid email' },
-            }}
-            keyboardType='email-address'
-          />
-          <Input
-            control={control}
-            name='firstName'
-            label='first name'
-            rules={{
-              required: 'First name is required',
-            }}
-          />
-          <Input
-            control={control}
-            name='lastName'
-            label='last name'
-            rules={{
-              required: 'Last name is required',
-            }}
-          />
-          <Input
-            control={control}
-            name='password'
-            label='password'
-            rules={{
-              required: 'Password is required',
-              minLength: {
-                value: 6,
-                message: 'Password must be at least 6 characters',
-              },
-            }}
-            secureTextEntry
-          />
-          <Input
-            control={control}
-            name='passwordConfirmation'
-            label='password confirmation'
-            rules={{
-              required: 'Password confirmation is required',
-              validate: value =>
-                value === control._formValues.password ||
-                'Passwords do not match',
-            }}
-            secureTextEntry
-          />
-          {loading && <Loader />}
-          {error && (
-            <Typography variant='specialText' color='error'>
-              Something went wrong, please try again
-            </Typography>
-          )}
+      <ScrollView
+        contentContainerStyle={[
+          styles.scrollViewContent,
+          { paddingTop: insets.top + 36 },
+        ]}
+        keyboardShouldPersistTaps='handled'
+      >
+        <View style={{ paddingHorizontal: 16, gap: 32 }}>
+          <Typography variant='h1' color='plum500'>
+            Create account
+          </Typography>
+          <View style={{ paddingHorizontal: 12, gap: 16 }}>
+            <Input
+              control={control}
+              name='email'
+              label='e-mail address'
+              rules={{
+                required: 'Email is required',
+                pattern: { value: /^\S+@\S+$/i, message: 'Invalid email' },
+              }}
+              keyboardType='email-address'
+            />
+            <Input
+              control={control}
+              name='firstName'
+              label='first name'
+              rules={{
+                required: 'First name is required',
+              }}
+            />
+            <Input
+              control={control}
+              name='lastName'
+              label='last name'
+              rules={{
+                required: 'Last name is required',
+              }}
+            />
+            <Input
+              control={control}
+              name='password'
+              label='password'
+              rules={{
+                required: 'Password is required',
+                minLength: {
+                  value: 6,
+                  message: 'Password must be at least 6 characters',
+                },
+              }}
+              secureTextEntry
+            />
+            <Input
+              control={control}
+              name='passwordConfirmation'
+              label='password confirmation'
+              rules={{
+                required: 'Password confirmation is required',
+                validate: value =>
+                  value === control._formValues.password ||
+                  'Passwords do not match',
+              }}
+              secureTextEntry
+            />
+            {loading && <Loader />}
+            {error && (
+              <Typography variant='specialText' color='error'>
+                Something went wrong, please try again
+              </Typography>
+            )}
+          </View>
         </View>
-      </View>
-      <View style={styles.bottomContainer}>
+      </ScrollView>
+      <View style={[styles.bottomContainer, { paddingBottom: insets.bottom }]}>
         <Button
           variant='primary'
           label='Sign up'
@@ -155,7 +170,7 @@ export const SignUp: FC = () => {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -168,6 +183,10 @@ const styles = StyleSheet.create({
   bottomContainer: {
     gap: 16,
     paddingHorizontal: 16,
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
   },
   logInContainer: {
     flexDirection: 'row',
