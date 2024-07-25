@@ -49,7 +49,11 @@ export const useAuth = () => {
 export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const [user, setUser] = useState<UserType | undefined>(undefined);
 
-  const { loading: userLoading, client, refetch: refetchUser } = useGetUser();
+  const {
+    loading: userLoading,
+    client,
+    refetch: refetchUser,
+  } = useGetUser({ poolingInterval: 1000 * 3 });
   const [signUpMutation, { loading: signUpLoading, error: signUpError }] =
     useRegister();
   const [loginUserMutation, { loading: loginLoading, error: loginError }] =

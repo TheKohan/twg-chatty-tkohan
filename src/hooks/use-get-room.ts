@@ -29,9 +29,15 @@ export const GET_ROOM = graphql(`
   }
 `);
 
-export const useGetRoom = ({ roomId }: { roomId: string }) => {
+export const useGetRoom = ({
+  roomId,
+  pollInterval,
+}: {
+  roomId: string;
+  pollInterval?: number;
+}) => {
   return useQuery(GET_ROOM, {
     variables: { id: roomId },
-    pollInterval: 1000 * 3,
+    pollInterval,
   });
 };

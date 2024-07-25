@@ -30,8 +30,7 @@ const authLink = setContext(async (_, { headers }) => {
 });
 
 const wsLink = createAbsintheSocketLink(absintheSocket);
-const link = authLink.concat(httpLink); // add onError link and logout user when unauthorized
-
+const link = authLink.concat(httpLink);
 const splitLink = split(
   ({ query }) => {
     const definition = getMainDefinition(query);

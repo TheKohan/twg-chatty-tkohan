@@ -17,6 +17,7 @@ export const RoomItem: React.FC<{ room: SingleRoomType }> = ({ room }) => {
   const { user } = useAuth();
   const { data, loading, error, refetch } = useGetRoom({
     roomId: room.id ?? '',
+    pollInterval: 1000 * 3,
   });
 
   const lastMessage = data?.room?.messages?.[0];

@@ -4,7 +4,9 @@ import { colors } from '@chatty/theme';
 import { useGetRooms } from '@chatty/hooks';
 
 export const Rooms = () => {
-  const { loading, error, data, refetch } = useGetRooms();
+  const { loading, error, data, refetch } = useGetRooms({
+    poolingInterval: 1000 * 3,
+  });
 
   return (
     <StatusWrapper

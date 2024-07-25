@@ -19,8 +19,8 @@ export const GET_ALL_ROOMS = graphql(`
   }
 `);
 
-export const useGetRooms = () => {
+export const useGetRooms = (props?: { poolingInterval?: number }) => {
   return useQuery(GET_ALL_ROOMS, {
-    pollInterval: 1000 * 3,
+    pollInterval: props?.poolingInterval,
   });
 };

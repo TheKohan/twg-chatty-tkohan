@@ -13,8 +13,8 @@ const GET_CURRENT_USER = graphql(`
   }
 `);
 
-export const useGetUser = () => {
+export const useGetUser = (props?: { poolingInterval?: number }) => {
   return useQuery(GET_CURRENT_USER, {
-    pollInterval: 1000 * 3,
+    pollInterval: props?.poolingInterval,
   });
 };

@@ -1,7 +1,8 @@
 import { RoomRouteProp } from '@chatty/types';
 import { useRoute } from '@react-navigation/native';
-import { Chat } from '@chatty/components';
+import { Chat, StatusWrapper } from '@chatty/components';
 import { useAuth } from '@chatty/context';
+import { useGetRoom } from '@chatty/hooks';
 
 /**
  * Theres an issue https://github.com/FaridSafi/react-native-gifted-chat/issues/2498
@@ -11,5 +12,24 @@ import { useAuth } from '@chatty/context';
 export const Room = () => {
   const { params } = useRoute<RoomRouteProp>();
   const { user } = useAuth();
-  return <Chat roomId={params.roomId} user={user} />;
+  const { data, loading, error, refetch } = useGetRoom({
+    roomId: params.roomId,
+  });
+
+  const initialMessages = (data?.room?.messages ?? []).filter(v => v != null);
+
+  return (
+    <StatusWrapper
+      loading={loading}
+      error={!!error}
+      onTryAgain={refetch}
+      style={{ flex: 1 }}
+    >
+      <Chat
+        roomId={params.roomId}
+        user={user}
+        initialMessages={initialMessages}
+      />
+    </StatusWrapper>
+  );
 };
