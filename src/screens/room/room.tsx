@@ -3,6 +3,7 @@ import { useRoute } from '@react-navigation/native';
 import { useQuery } from '@apollo/client';
 import { GET_CURRENT_USER } from '@chatty/graphql';
 import { Chat } from '@chatty/components';
+import { useAuth } from '@chatty/context';
 
 /**
  * Theres an issue https://github.com/FaridSafi/react-native-gifted-chat/issues/2498
@@ -11,6 +12,6 @@ import { Chat } from '@chatty/components';
 
 export const Room = () => {
   const { params } = useRoute<RoomRouteProp>();
-  const { data: userData } = useQuery(GET_CURRENT_USER);
-  return <Chat roomId={params.roomId} user={userData?.user ?? undefined} />;
+  const { user } = useAuth();
+  return <Chat roomId={params.roomId} user={user} />;
 };

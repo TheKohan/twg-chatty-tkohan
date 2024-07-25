@@ -5,11 +5,14 @@ import { NavigationContainer } from '@react-navigation/native';
 import { client } from './apollo';
 import { ApolloProvider } from '@apollo/client';
 import { AuthProvider } from '@chatty/context';
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs(['Avatar: Support for defaultProps']);
 
 export default function Root() {
   return (
-    <AuthProvider>
-      <ApolloProvider client={client}>
+    <ApolloProvider client={client}>
+      <AuthProvider>
         <NavigationContainer>
           <SafeAreaProvider>
             <Layout>
@@ -17,7 +20,7 @@ export default function Root() {
             </Layout>
           </SafeAreaProvider>
         </NavigationContainer>
-      </ApolloProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </ApolloProvider>
   );
 }

@@ -9,6 +9,7 @@ import { FieldValues, useForm } from 'react-hook-form';
 import { StyleSheet, TouchableOpacity, View, Linking } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as SecureStore from 'expo-secure-store';
+import { useAuth } from '@chatty/context';
 
 type FormValues = {
   email: string;
@@ -21,15 +22,9 @@ type FormValues = {
 export const SignUp: FC = () => {
   const insets = useSafeAreaInsets();
   const { navigate } = useNavigation<RoomsNavigationProp>();
-  const [signUp, { error: signUpError, loading: signUpLoading }] =
-    useMutation(REGISTER_USER);
-  const [loginUser, { error: loginError, loading: loginLoading }] =
-    useMutation(LOGIN_USER);
+  const { loading, error, signUp } = useAuth();
 
   const { control, handleSubmit } = useForm<FieldValues>();
-
-  const loading = signUpLoading || loginLoading;
-  const error = signUpError || loginError;
 
   const onSubmit = async (data: FieldValues) => {
     if (
@@ -40,18 +35,7 @@ export const SignUp: FC = () => {
       data.passwordConfirmation
     ) {
       const formData = data as FormValues;
-      //@TODO: useAuth hook login
-
-      const registerData = await signUp({
-        variables: formData,
-      });
-
-      if (!registerData.errors) {
-        const loginData = await loginUser({ variables: formData });
-        if (loginData.data?.loginUser?.token) {
-          SecureStore.setItem('token', loginData.data.loginUser.token);
-        }
-      }
+      await signUp(formData);
     }
   };
 

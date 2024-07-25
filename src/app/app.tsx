@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Rooms, Room, Login, SignUp } from '@chatty/screens';
 import { RootStackParamList } from '@chatty/types';
 import { Header } from '@chatty/components';
+import { useAuth } from '@chatty/context';
 
 //@TODO: export this possibly
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -9,11 +10,11 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 //@TODO error boundary
 
 export const App = () => {
-  const isAuth = false; //For now
+  const { user } = useAuth();
 
   return (
     <Stack.Navigator initialRouteName='Rooms'>
-      {isAuth ? (
+      {!!user ? (
         <>
           <Stack.Screen
             options={{

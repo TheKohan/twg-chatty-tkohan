@@ -12,19 +12,25 @@ import { useMutation, useQuery } from '@apollo/client';
 import { REGISTER_USER, LOGIN_USER, GET_CURRENT_USER } from '@chatty/graphql';
 import { set } from 'react-hook-form';
 
+type LoginData = {
+  email: string;
+  password: string;
+};
+
+type SignUpData = {
+  email: string;
+  password: string;
+  passwordConfirmation: string;
+  firstName: string;
+  lastName: string;
+};
+
 type AuthContextType = {
   user?: UserType;
-  token?: string;
   loading: boolean;
   error?: string;
-  login: (email: string, password: string) => Promise<void>;
-  signUp: (
-    email: string,
-    password: string,
-    passwordConfirmation: string,
-    firstName: string,
-    lastName: string
-  ) => Promise<void>;
+  login: (data: LoginData) => Promise<void>;
+  signUp: (data: SignUpData) => Promise<void>;
   logout: () => Promise<void>;
 };
 
@@ -38,17 +44,21 @@ export const useAuth = () => {
 
 export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const [user, setUser] = useState<UserType | undefined>(undefined);
-  const [token, setToken] = useState<string | undefined>(undefined);
 
   const {
     loading: userLoading,
     error: userError,
+    client,
     refetch: refetchUser,
   } = useQuery(GET_CURRENT_USER);
   const [signUpMutation, { loading: signUpLoading, error: signUpError }] =
     useMutation(REGISTER_USER);
   const [loginUserMutation, { loading: loginLoading, error: loginError }] =
     useMutation(LOGIN_USER);
+
+  console.log('signUpError', signUpError);
+  console.log('loginError', loginError);
+  console.log('userError', userError);
 
   useEffect(() => {
     const checkUserLoggedIn = async () => {
@@ -63,36 +73,36 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     checkUserLoggedIn();
   }, []);
 
-  const login = async (email: string, password: string) => {
+  const login = async ({ email, password }: LoginData) => {
     const { data } = await loginUserMutation({
       variables: { email, password },
     });
     if (data && data.loginUser && data.loginUser.token) {
       await SecureStorage.setItemAsync('token', data.loginUser.token);
       setUser(data.loginUser.user ?? undefined);
-      setToken(data.loginUser.token);
     } else {
       throw new Error('Login failed');
     }
   };
 
-  const signUp = async (
-    email: string,
-    password: string,
-    passwordConfirmation: string,
-    firstName: string,
-    lastName: string
-  ) => {
+  const signUp = async ({
+    email,
+    password,
+    passwordConfirmation,
+    firstName,
+    lastName,
+  }: SignUpData) => {
     const { data } = await signUpMutation({
       variables: { email, password, passwordConfirmation, firstName, lastName },
     });
     if (data?.registerUser) {
-      await login(email, password);
+      await login({ email, password });
     }
   };
 
   const logout = async () => {
     await SecureStorage.deleteItemAsync('token');
+    client.resetStore();
     setUser(undefined);
   };
 
@@ -100,10 +110,8 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     <AuthContext.Provider
       value={{
         user,
-        token,
         loading: signUpLoading || loginLoading || userLoading,
-        error:
-          signUpError?.message || loginError?.message || userError?.message,
+        error: signUpError?.message || loginError?.message,
         login,
         signUp,
         logout,

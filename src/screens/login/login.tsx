@@ -1,6 +1,4 @@
-import { useMutation } from '@apollo/client';
 import { Button, Input, Loader, Typography } from '@chatty/components';
-import { LOGIN_USER } from '@chatty/graphql';
 import { colors } from '@chatty/theme';
 import { RoomsNavigationProp } from '@chatty/types';
 import { useNavigation } from '@react-navigation/native';
@@ -8,7 +6,7 @@ import { FC } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import * as SecureStore from 'expo-secure-store';
+import { useAuth } from '@chatty/context';
 
 type FormValues = {
   email: string;
@@ -18,18 +16,14 @@ type FormValues = {
 export const Login: FC = () => {
   const insets = useSafeAreaInsets();
   const { navigate } = useNavigation<RoomsNavigationProp>();
-  const [loginUser, { error: loginError, loading }] = useMutation(LOGIN_USER);
+  const { login, loading, error } = useAuth();
 
   const { control, handleSubmit } = useForm<FieldValues>();
 
   const onSubmit = async (data: FieldValues) => {
     if (data.email && data.password) {
-      const { email, password } = data as FormValues;
-      const loginData = await loginUser({ variables: { email, password } });
-      if (loginData.data?.loginUser?.token) {
-        //@TODO: useAuth hook login
-        SecureStore.setItem('token', loginData.data.loginUser.token);
-      }
+      const formData = data as FormValues;
+      await login(formData);
     }
   };
 
@@ -52,6 +46,7 @@ export const Login: FC = () => {
             control={control}
             name='email'
             label='email-address'
+            defaultValue='barbara.sabich@mail.com'
             rules={{
               required: 'Email is required',
               pattern: { value: /^\S+@\S+$/i, message: 'Invalid email' },
@@ -61,6 +56,7 @@ export const Login: FC = () => {
           <Input
             control={control}
             name='password'
+            defaultValue='qsiyRk4PNLfGLbC'
             label='Password'
             rules={{
               required: 'Password is required',
@@ -72,9 +68,9 @@ export const Login: FC = () => {
             secureTextEntry
           />
           {loading && <Loader />}
-          {loginError && (
+          {error && (
             <Typography variant='specialText' color='error'>
-              Something went wrong, please try again
+              Something went wrong, please try again {error}
             </Typography>
           )}
         </View>

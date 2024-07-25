@@ -7,6 +7,7 @@ import { Typography } from '../typography';
 import { RootStackParamList } from '@chatty/types';
 import { colors, borders } from '@chatty/theme';
 import { Button } from '../button';
+import { useAuth } from '@chatty/context';
 
 export const Header: FC<NativeStackHeaderProps> = ({
   route,
@@ -14,6 +15,8 @@ export const Header: FC<NativeStackHeaderProps> = ({
   navigation,
 }) => {
   const insets = useSafeAreaInsets();
+  const { logout } = useAuth();
+
   const routeName = route.name as keyof RootStackParamList;
   const roomParams =
     routeName === 'Room' ? (route.params as RootStackParamList['Room']) : null;
@@ -60,6 +63,7 @@ export const Header: FC<NativeStackHeaderProps> = ({
               </>
             ) : (
               <>
+                <Button variant='icon' icon='back' onPress={logout} />
                 <Icon.search />
                 <Icon.rooms />
               </>
