@@ -38,10 +38,7 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 if (process.env.NODE_ENV === 'development') {
-  SecureStorage.setItem(
-    AUTH_TOKEN_KEY,
-    env.authToken ?? ''
-  );
+  SecureStorage.setItem(AUTH_TOKEN_KEY, env.authToken ?? '');
 }
 
 export const useAuth = () => {
