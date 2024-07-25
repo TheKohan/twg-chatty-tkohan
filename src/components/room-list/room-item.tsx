@@ -1,94 +1,102 @@
-import { SingleRoomType } from '@chatty/__generated__/graphql';
-import { useGetRoom } from '@chatty/hooks';
-import { RoomsNavigationProp } from '@chatty/types';
-import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { Pressable, View, StyleSheet, Text } from 'react-native';
-import { Icon } from '../icon';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useGetRoom } from '@chatty/hooks';
+import { useAuth } from '@chatty/context';
 import { Typography } from '../typography';
 import { timeAgo } from '@chatty/utils';
+import { StatusWrapper } from '../status-wrapper';
+import { SingleRoomType } from '@chatty/__generated__/graphql';
+import { RoomsNavigationProp } from '@chatty/types';
+import { Icon } from '../icon';
+import { DateTime } from 'luxon';
 import { colors, borders } from '@chatty/theme';
 
 export const RoomItem: React.FC<{ room: SingleRoomType }> = ({ room }) => {
   const { navigate } = useNavigation<RoomsNavigationProp>();
-  const { loading, data, error } = useGetRoom({ roomId: room.id ?? '' });
+  const { user } = useAuth();
+  const { data, loading, error, refetch } = useGetRoom({
+    roomId: room.id ?? '',
+  });
 
-  const lastMessage = data?.room?.messages?.[0]?.body ?? '';
-  const dateAgo = new Date(data?.room?.messages?.[0]?.insertedAt ?? '');
+  const lastMessage = data?.room?.messages?.[0];
+  const isLastMessageNotByMe = lastMessage?.user?.id !== user?.id;
+  const dateAgo = DateTime.fromISO(lastMessage?.insertedAt ?? '');
+  const active =
+    dateAgo.diffNow('minutes').minutes > -1 && isLastMessageNotByMe;
+
+  const navigateToRoom = () =>
+    navigate('Room', { roomId: room.id ?? '', roomName: room.name ?? '' });
 
   return (
-    <Pressable
-      style={({ pressed }) => (pressed ? { elevation: 3 } : {})}
-      onPress={() =>
-        navigate('Room', { roomId: room.id ?? '', roomName: room.name ?? '' })
-      }
-    >
-      <View style={styles.roomItemContainer}>
+    <TouchableOpacity onPress={navigateToRoom} activeOpacity={0.8}>
+      <StatusWrapper
+        loading={loading}
+        error={!!error}
+        onTryAgain={refetch}
+        style={[styles.container, active && styles.active]}
+      >
         <Icon.profile />
-        <RoomItemActivityDisplay dateAgo={dateAgo} />
-        <View style={{ flex: 1, paddingTop: 12 }}>
-          {loading && <Text>Loading...</Text>}
-          {error && <Text>Error!</Text>}
-          {data && (
-            <>
-              <Typography
-                numberOfLines={1}
-                ellipsizeMode='tail'
-                variant='titleInput'
-                color='black'
-              >
-                {room.name}
-              </Typography>
-              <Typography
-                numberOfLines={1}
-                ellipsizeMode='tail'
-                variant='bodyText'
-                color='black'
-              >
-                {lastMessage}
-              </Typography>
-            </>
-          )}
+        {active ? (
+          <View style={styles.dot} />
+        ) : (
+          <Typography
+            variant='captionText'
+            color='gray500'
+            style={styles.dateText}
+          >
+            {timeAgo(dateAgo)}
+          </Typography>
+        )}
+        <View style={styles.content}>
+          <Typography
+            variant='titleInput'
+            color={active ? 'white' : 'black'}
+            numberOfLines={1}
+          >
+            {room.name}
+          </Typography>
+          <Typography
+            variant='bodyText'
+            color={active ? 'white' : 'black'}
+            numberOfLines={1}
+          >
+            {lastMessage?.body ?? ''}
+          </Typography>
         </View>
-      </View>
-    </Pressable>
-  );
-};
-
-const RoomItemActivityDisplay: React.FC<{
-  dateAgo: Date;
-}> = ({ dateAgo }) => {
-  const lastMessageDate = timeAgo(dateAgo);
-  //@TODO: handle green dot scenarios
-  return (
-    <Typography
-      variant='captionText'
-      color='gray500'
-      style={{
-        textAlign: 'right',
-        position: 'absolute',
-        right: 16,
-        top: 8,
-      }}
-    >
-      {lastMessageDate}
-    </Typography>
+      </StatusWrapper>
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  roomsContainer: {
-    flex: 1,
-    backgroundColor: colors.blue100,
-    paddingHorizontal: 8,
-  },
-  roomItemContainer: {
+  container: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: colors.white,
-    gap: 12,
     padding: 12,
     borderRadius: borders.sm,
+    gap: 12,
+  },
+  active: {
+    backgroundColor: colors.plum500,
+  },
+  dateText: {
+    position: 'absolute',
+    right: 16,
+    top: 8,
+  },
+  dot: {
+    backgroundColor: colors.active,
+    height: 12,
+    width: 12,
+    borderRadius: 6,
+    position: 'absolute',
+    right: 12,
+    top: 12,
+  },
+  content: {
+    flex: 1,
+    paddingTop: 12,
   },
 });

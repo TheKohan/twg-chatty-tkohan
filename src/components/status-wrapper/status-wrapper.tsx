@@ -1,6 +1,6 @@
 import { FC, PropsWithChildren } from 'react';
 import { Loader } from '../loader';
-import { TouchableOpacity, View, ViewStyle } from 'react-native';
+import { StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { Typography } from '../typography';
 
 type StatusWrapperProps = {
@@ -8,7 +8,7 @@ type StatusWrapperProps = {
   error?: boolean;
   errorMessage?: string;
   onTryAgain?: () => void;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
 };
 
 export const StatusWrapper: FC<PropsWithChildren<StatusWrapperProps>> = ({
@@ -30,7 +30,7 @@ export const StatusWrapper: FC<PropsWithChildren<StatusWrapperProps>> = ({
   if (error) {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Typography variant='h3' color='error'>
+        <Typography variant='h4' color='error'>
           {errorMessage ? errorMessage : ' Error, something went wrong'}
         </Typography>
         {onTryAgain && (

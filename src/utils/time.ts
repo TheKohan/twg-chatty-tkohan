@@ -1,11 +1,10 @@
 import { DateTime, DurationLikeObject } from 'luxon';
 
-export const timeAgo = (dateTime: Date) => {
+export const timeAgo = (dateTime: DateTime) => {
   const now = DateTime.now();
-  const dt = DateTime.fromJSDate(dateTime);
 
   const diff: DurationLikeObject = now
-    .diff(dt, ['months', 'days', 'hours', 'minutes', 'seconds'])
+    .diff(dateTime, ['months', 'days', 'hours', 'minutes', 'seconds'])
     .toObject();
 
   if (diff.months && diff.months >= 1) {
