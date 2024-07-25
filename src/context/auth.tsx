@@ -11,7 +11,7 @@ import { UserType } from '@chatty/__generated__/graphql';
 import { useMutation, useQuery } from '@apollo/client';
 import { REGISTER_USER, LOGIN_USER, GET_CURRENT_USER } from '@chatty/graphql';
 import { set } from 'react-hook-form';
-import { AUTH_TOKEN_KEY } from '@chatty/utils';
+import { AUTH_TOKEN_KEY, env } from '@chatty/utils';
 
 type LoginData = {
   email: string;
@@ -40,7 +40,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 if (process.env.NODE_ENV === 'development') {
   SecureStorage.setItem(
     AUTH_TOKEN_KEY,
-    process.env.EXPO_PUBLIC_API_TOKEN ?? ''
+    env.authToken ?? ''
   );
 }
 
