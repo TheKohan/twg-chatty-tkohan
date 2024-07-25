@@ -24,10 +24,12 @@ const wsLink = new GraphQLWsLink(
   createClient({
     url: env.wsUrl,
     connectionParams: async () => {
+      console.log('wsLink connectionParams');
       const token = await SecureStore.getItem(AUTH_TOKEN_KEY);
       return {
         authorization: token ? `Bearer ${token}` : '',
       };
+      3;
     },
   })
 );

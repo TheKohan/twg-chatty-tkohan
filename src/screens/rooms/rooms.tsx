@@ -18,7 +18,6 @@ export const Rooms = () => {
       style={{
         flex: 1,
         backgroundColor: colors.blue100,
-        paddingTop: 36,
         paddingHorizontal: 8,
       }}
     >
@@ -34,7 +33,7 @@ const RoomList: React.FC<{ userRooms: RoomsType }> = ({ userRooms }) => {
     <FlatList
       data={userRooms.rooms}
       keyExtractor={room => room?.id ?? ''}
-      contentContainerStyle={{ gap: 12 }}
+      contentContainerStyle={{ gap: 12, paddingTop: 36 }}
       renderItem={({ item }) => (item ? <RoomItem room={item} /> : null)}
     />
   );
