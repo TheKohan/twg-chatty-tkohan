@@ -10,7 +10,6 @@ import * as SecureStorage from 'expo-secure-store';
 import { UserType } from '@chatty/__generated__/graphql';
 import { useMutation, useQuery } from '@apollo/client';
 import { REGISTER_USER, LOGIN_USER, GET_CURRENT_USER } from '@chatty/graphql';
-import { set } from 'react-hook-form';
 import { AUTH_TOKEN_KEY, env } from '@chatty/utils';
 
 type LoginData = {

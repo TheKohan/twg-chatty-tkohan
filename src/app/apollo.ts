@@ -1,19 +1,24 @@
 import { ApolloClient, InMemoryCache, split, HttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { getMainDefinition } from '@apollo/client/utilities';
-import { createClient } from 'graphql-ws';
 import * as SecureStore from 'expo-secure-store';
 import { AUTH_TOKEN_KEY, env } from '@chatty/utils';
-import AsyncParamsPhoenixSocket from './async-phoenix';
+import AsyncParamsPhoenixSocket from '../utils/async-phoenix';
 import { createAbsintheSocketLink } from '@absinthe/socket-apollo-link';
 import * as AbsintheSocket from '@absinthe/socket';
+
+const phoenixSocket = new AsyncParamsPhoenixSocket(env.wsUrl, {
+  params: async () => ({
+    token: SecureStore.getItem(AUTH_TOKEN_KEY),
+  }),
+});
+
+const absintheSocket = AbsintheSocket.create(phoenixSocket);
 
 const httpLink = new HttpLink({
   uri: env.apiUrl,
 });
 
-/** TODO: Add error handling when user is not AUTHENTICATED anymore */
 const authLink = setContext(async (_, { headers }) => {
   const token = await SecureStore.getItem(AUTH_TOKEN_KEY);
   return {
@@ -24,14 +29,8 @@ const authLink = setContext(async (_, { headers }) => {
   };
 });
 
-const phoenixSocket = new AsyncParamsPhoenixSocket(env.wsUrl, {
-  params: async () => ({
-    token: SecureStore.getItem(AUTH_TOKEN_KEY),
-  }),
-});
-
-const absintheSocket = AbsintheSocket.create(phoenixSocket);
 const wsLink = createAbsintheSocketLink(absintheSocket);
+const link = authLink.concat(httpLink); // add onError link and logout user when unauthorized
 
 const splitLink = split(
   ({ query }) => {
@@ -41,11 +40,10 @@ const splitLink = split(
       definition.operation === 'subscription'
     );
   },
-  wsLink as any, // Tried with gql-ws but for some reason the socket kept getting disconnected
-  authLink.concat(httpLink)
+  wsLink as any,
+  link
 );
 
-// Apollo Client
 export const client = new ApolloClient({
   link: splitLink,
   cache: new InMemoryCache(),

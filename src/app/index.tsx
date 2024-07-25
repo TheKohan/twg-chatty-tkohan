@@ -1,26 +1,46 @@
-import { App } from './app';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { Layout } from './layout';
-import { NavigationContainer } from '@react-navigation/native';
-import { client } from './apollo';
+import { AuthProvider, useAuth } from '@chatty/context';
+import { Router } from './router';
 import { ApolloProvider } from '@apollo/client';
-import { AuthProvider } from '@chatty/context';
+import { NavigationContainer } from '@react-navigation/native';
 import { LogBox } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { client } from './apollo';
+import { StatusBar } from 'expo-status-bar';
+import * as SplashScreen from 'expo-splash-screen';
+import { fontAssets } from '@chatty/theme';
+import { useEffect } from 'react';
+import { useFonts } from 'expo-font';
 
+/** @TODO try to fix */
 LogBox.ignoreLogs(['Avatar: Support for defaultProps']);
+SplashScreen.preventAutoHideAsync();
 
-export default function Root() {
+const AppContent = () => {
+  const { user } = useAuth();
+  const [loaded, error] = useFonts(fontAssets);
+
+  useEffect(() => {
+    if (loaded || error) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded, error]);
+
+  return (
+    <NavigationContainer>
+      <SafeAreaProvider>
+        <StatusBar style='auto' />
+        <Router isAuthenticated={!!user} />
+      </SafeAreaProvider>
+    </NavigationContainer>
+  );
+};
+
+export default () => {
   return (
     <ApolloProvider client={client}>
       <AuthProvider>
-        <NavigationContainer>
-          <SafeAreaProvider>
-            <Layout>
-              <App />
-            </Layout>
-          </SafeAreaProvider>
-        </NavigationContainer>
+        <AppContent />
       </AuthProvider>
     </ApolloProvider>
   );
-}
+};

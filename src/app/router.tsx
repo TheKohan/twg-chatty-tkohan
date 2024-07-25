@@ -1,20 +1,21 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Rooms, Room, Login, SignUp } from '@chatty/screens';
-import { RootStackParamList } from '@chatty/types';
 import { Header } from '@chatty/components';
-import { useAuth } from '@chatty/context';
+import { Login, Room, Rooms, SignUp } from '@chatty/screens';
+import { RootStackParamList } from '@chatty/types';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { FC } from 'react';
 
-//@TODO: export this possibly
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-//@TODO error boundary
+type RouterProps = {
+  isAuthenticated: boolean;
+};
 
-export const App = () => {
-  const { user } = useAuth();
-
+export const Router: FC<RouterProps> = ({ isAuthenticated }) => {
   return (
     <Stack.Navigator initialRouteName='Rooms'>
-      {!!user ? (
+      {!!isAuthenticated ? (
+        // For more sophisticated routing setup you could make some
+        // config and map it here, but it's overkill for 4 routes
         <>
           <Stack.Screen
             options={{
