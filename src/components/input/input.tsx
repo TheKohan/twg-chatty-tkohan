@@ -131,9 +131,6 @@ const styles = StyleSheet.create({
   iconContainer: {
     padding: 10,
   },
-  errorText: {
-    textAlign: 'right',
-  },
 });
 
 export default Input;

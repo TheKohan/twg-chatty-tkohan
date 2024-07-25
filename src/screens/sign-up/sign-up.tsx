@@ -35,6 +35,7 @@ export const SignUp: FC = () => {
   const { control, handleSubmit } = useForm<FieldValues>();
 
   const onSubmit = async (data: FieldValues) => {
+    // Proper payload validation with zod (if needed)
     if (
       data.email &&
       data.firstName &&
