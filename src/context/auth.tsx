@@ -11,6 +11,7 @@ import { UserType } from '@chatty/__generated__/graphql';
 import { useMutation, useQuery } from '@apollo/client';
 import { REGISTER_USER, LOGIN_USER, GET_CURRENT_USER } from '@chatty/graphql';
 import { set } from 'react-hook-form';
+import { AUTH_TOKEN_KEY } from '@chatty/utils';
 
 type LoginData = {
   email: string;
@@ -36,6 +37,13 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+if (process.env.NODE_ENV === 'development') {
+  SecureStorage.setItem(
+    AUTH_TOKEN_KEY,
+    process.env.EXPO_PUBLIC_API_TOKEN ?? ''
+  );
+}
+
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) throw new Error('useAuth must be used within an AuthProvider');
@@ -58,9 +66,8 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   useEffect(() => {
     const checkUserLoggedIn = async () => {
       if (user) return;
-      const token = await SecureStorage.getItemAsync('userToken');
+      const token = await SecureStorage.getItemAsync('token');
       if (token) {
-        console.log('REFETCHING USER');
         const userData = await refetchUser();
         setUser(userData.data?.user ?? undefined);
       }
@@ -74,7 +81,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
       variables: { email, password },
     });
     if (data && data.loginUser && data.loginUser.token) {
-      await SecureStorage.setItemAsync('token', data.loginUser.token);
+      await SecureStorage.setItemAsync(AUTH_TOKEN_KEY, data.loginUser.token);
       setUser(data.loginUser.user ?? undefined);
       await client.resetStore();
     } else {
