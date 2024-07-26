@@ -3,7 +3,6 @@ import { View, StyleSheet } from 'react-native';
 import { Icon } from '../icon';
 import { Typography } from '../typography';
 import { RoomParams } from './header';
-import { colors } from '@chatty/theme';
 import { Button } from '../button';
 
 type HeaderLeftProps = {

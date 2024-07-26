@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useGetRoom } from '@chatty/hooks';
 import { useAuth } from '@chatty/context';
 import { Typography } from '../typography';
-import { timeAgo } from '@chatty/utils';
+import { dateTimeFromUTCString, timeAgoFromUTC } from '@chatty/utils';
 import { StatusWrapper } from '../status-wrapper';
 import { SingleRoomType } from '@chatty/__generated__/graphql';
 import { RoomsNavigationProp } from '@chatty/types';
@@ -12,19 +12,40 @@ import { Icon } from '../icon';
 import { DateTime } from 'luxon';
 import { colors, borders } from '@chatty/theme';
 
+const ROOM_POOL_INTERVAL = 1000 * 10; // 10 seconds
+
 export const RoomItem: React.FC<{ room: SingleRoomType }> = ({ room }) => {
+  const [active, setActive] = useState(false);
+  const [timeAgo, setTimeAgo] = useState('');
+
   const { navigate } = useNavigation<RoomsNavigationProp>();
   const { user } = useAuth();
   const { data, loading, error, refetch } = useGetRoom({
     roomId: room.id ?? '',
-    pollInterval: 1000 * 3,
+    pollInterval: 1000 * 10,
   });
 
   const lastMessage = data?.room?.messages?.[0];
   const isLastMessageNotByMe = lastMessage?.user?.id !== user?.id;
-  const dateAgo = DateTime.fromISO(lastMessage?.insertedAt ?? '');
-  const active =
-    dateAgo.diffNow('minutes').minutes > -1 && isLastMessageNotByMe;
+
+  useEffect(() => {
+    const updateTimeAgo = () => {
+      if (!lastMessage) return;
+      const lastMessageDate = dateTimeFromUTCString(
+        lastMessage?.insertedAt ?? ''
+      );
+
+      const nowUTC = DateTime.utc();
+      const isActive = nowUTC.diff(lastMessageDate, ['seconds']).seconds < 60;
+
+      setActive(isActive);
+      setTimeAgo(timeAgoFromUTC(lastMessageDate));
+    };
+    updateTimeAgo();
+
+    const interval = setInterval(updateTimeAgo, ROOM_POOL_INTERVAL);
+    return () => clearInterval(interval);
+  }, [lastMessage, isLastMessageNotByMe]);
 
   const navigateToRoom = () =>
     navigate('Room', { roomId: room.id ?? '', roomName: room.name ?? '' });
@@ -46,7 +67,7 @@ export const RoomItem: React.FC<{ room: SingleRoomType }> = ({ room }) => {
             color='gray500'
             style={styles.dateText}
           >
-            {timeAgo(dateAgo)}
+            {timeAgo}
           </Typography>
         )}
         <View style={styles.content}>

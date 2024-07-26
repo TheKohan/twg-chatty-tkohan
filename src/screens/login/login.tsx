@@ -80,7 +80,6 @@ export const Login: FC = () => {
               }}
               secureTextEntry
             />
-            {loading && <Loader />}
             {error && (
               <Typography variant='specialText' color='error'>
                 Something went wrong, please try again {error}
@@ -90,6 +89,7 @@ export const Login: FC = () => {
         </View>
       </ScrollView>
       <View style={[styles.bottomContainer, { paddingBottom: insets.bottom }]}>
+        {loading && <Loader />}
         <Button
           variant='primary'
           label='Log in'

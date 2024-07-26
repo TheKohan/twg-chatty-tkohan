@@ -40,7 +40,7 @@ export const ChatInput: FC<InputToolbarProps<IMessage>> = props => {
         borderRadius: 12,
         backgroundColor: colors.blue300,
         padding: 12,
-        paddingBottom: insets.bottom,
+        paddingBottom: 12 + insets.bottom,
       }}
       primaryStyle={{
         backgroundColor: colors.white,

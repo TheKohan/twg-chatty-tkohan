@@ -1,21 +1,26 @@
-import { DateTime, DurationLikeObject } from 'luxon';
+import { DateTime } from 'luxon';
 
-export const timeAgo = (dateTime: DateTime) => {
-  const now = DateTime.now();
+export const timeAgoFromUTC = (date: DateTime) => {
+  const now = DateTime.utc();
+  const diff = now.diff(date, [
+    'years',
+    'months',
+    'days',
+    'hours',
+    'minutes',
+    'seconds',
+  ]);
 
-  const diff: DurationLikeObject = now
-    .diff(dateTime, ['months', 'days', 'hours', 'minutes', 'seconds'])
-    .toObject();
+  if (diff.years >= 1) return `${Math.floor(diff.years)}y ago`;
+  if (diff.months >= 1) return `${Math.floor(diff.months)}mo ago`;
+  if (diff.days >= 1) return `${Math.floor(diff.days)}d ago`;
+  if (diff.hours >= 1) return `${Math.floor(diff.hours)}h ago`;
+  if (diff.minutes >= 1) return `${Math.floor(diff.minutes)}m ago`;
+  return 'just now';
+};
 
-  if (diff.months && diff.months >= 1) {
-    return `${Math.floor(diff.months)}mo ago`;
-  } else if (diff.days && diff.days >= 1) {
-    return `${Math.floor(diff.days)}d ago`;
-  } else if (diff.hours && diff.hours >= 1) {
-    return `${Math.floor(diff.hours)}h ago`;
-  } else if (diff.minutes && diff.minutes >= 1) {
-    return `${Math.floor(diff.minutes)}m ago`;
-  } else {
-    return 'just now';
-  }
+export const dateTimeFromUTCString = (dateString: string) => {
+  return DateTime.fromFormat(dateString, 'yyyy-MM-dd HH:mm:ss', {
+    zone: 'utc',
+  });
 };

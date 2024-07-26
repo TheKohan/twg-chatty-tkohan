@@ -24,6 +24,8 @@ const AppContent = () => {
     }
   }, [loaded, error]);
 
+  if (!loaded) return null;
+
   return (
     <NavigationContainer>
       <SafeAreaProvider>

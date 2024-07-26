@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { GiftedChat, IMessage } from 'react-native-gifted-chat';
 import { Message, UserType } from '@chatty/__generated__/graphql';
 import { mapToGiftedMessage, mapUserToGifted } from '@chatty/utils';
@@ -17,6 +17,7 @@ import { ChatBubble } from './chat-bubble';
 import { ChatInput } from './chat-input';
 import { ChatSendButton } from './chat-send-button';
 import { TypingIndicator } from './chat-typing-indicator';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface ChatProps {
   roomId: string;
@@ -28,6 +29,7 @@ const TYPING_TIMEOUT = 3000;
 
 export const Chat: FC<ChatProps> = ({ roomId, user, initialMessages = [] }) => {
   const isKeyboardVisible = useKeyboardVisible();
+  const insets = useSafeAreaInsets();
   const { data: messageAddedData } = useMessageAddedSubscription({ roomId });
   const typingSub = useTypingSubscription({ roomId });
   const [setTypingUser] = useSetTyping({ roomId });
@@ -86,7 +88,7 @@ export const Chat: FC<ChatProps> = ({ roomId, user, initialMessages = [] }) => {
         inverted={true}
         placeholder=''
         bottomOffset={-30}
-        messagesContainerStyle={isKeyboardVisible ? {} : { paddingBottom: 52 }}
+        messagesContainerStyle={{ paddingBottom: insets.bottom + 24 }}
         renderFooter={() => isTyping && <TypingIndicator />}
         renderBubble={props => <ChatBubble {...props} />}
         renderInputToolbar={props => <ChatInput {...props} />}
