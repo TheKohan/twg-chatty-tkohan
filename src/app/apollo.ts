@@ -27,6 +27,7 @@ const errorLink = onError(({ graphQLErrors, networkError, operation }) => {
     for (const err of graphQLErrors) {
       if (err.message.includes('Unauthorized')) {
         SecureStore.deleteItemAsync(AUTH_TOKEN_KEY);
+        return;
       }
       console.error(
         `[GraphQL error]: Message: ${err.message}, Location: ${err.locations}, Path: ${err.path}`,
