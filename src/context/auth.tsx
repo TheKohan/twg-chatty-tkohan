@@ -50,11 +50,7 @@ export const useAuth = () => {
 export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const [user, setUser] = useState<UserType | undefined>(undefined);
 
-  const {
-    loading: userLoading,
-    client,
-    refetch: refetchUser,
-  } = useGetUser({ poolingInterval: 1000 * 3 });
+  const { loading: userLoading, client, refetch: refetchUser } = useGetUser();
   const [signUpMutation, { loading: signUpLoading, error: signUpError }] =
     useRegister();
   const [loginUserMutation, { loading: loginLoading, error: loginError }] =
@@ -94,7 +90,13 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     lastName,
   }: SignUpData) => {
     const { data } = await signUpMutation({
-      variables: { email, password, passwordConfirmation, firstName, lastName },
+      variables: {
+        email,
+        password,
+        passwordConfirmation,
+        firstName,
+        lastName,
+      },
     });
     if (data?.registerUser) {
       await login({ email, password });

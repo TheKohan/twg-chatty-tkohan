@@ -41,7 +41,11 @@ export const SignUp: FC = () => {
       data.passwordConfirmation
     ) {
       const formData = data as FormValues;
-      await signUp(formData);
+      try {
+        await signUp(formData);
+      } catch (e) {
+        console.error(e);
+      }
     }
   };
 

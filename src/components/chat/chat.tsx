@@ -28,7 +28,6 @@ interface ChatProps {
 const TYPING_TIMEOUT = 3000;
 
 export const Chat: FC<ChatProps> = ({ roomId, user, initialMessages = [] }) => {
-  const isKeyboardVisible = useKeyboardVisible();
   const insets = useSafeAreaInsets();
   const { data: messageAddedData } = useMessageAddedSubscription({ roomId });
   const typingSub = useTypingSubscription({ roomId });
@@ -61,9 +60,13 @@ export const Chat: FC<ChatProps> = ({ roomId, user, initialMessages = [] }) => {
   const handleSend = useCallback(
     async (newMessages: IMessage[] = []) => {
       for (const message of newMessages) {
-        await sendMessageToRoom({
-          variables: { roomId, body: message.text },
-        });
+        try {
+          await sendMessageToRoom({
+            variables: { roomId, body: message.text },
+          });
+        } catch (e) {
+          console.error(e);
+        }
       }
     },
     [roomId, sendMessageToRoom]
@@ -72,7 +75,11 @@ export const Chat: FC<ChatProps> = ({ roomId, user, initialMessages = [] }) => {
   const handleInputTextChanged = useCallback(
     async (text: string) => {
       if (!text) return;
-      await setTypingUser({ variables: { roomId } });
+      try {
+        await setTypingUser({ variables: { roomId } });
+      } catch (e) {
+        console.error(e);
+      }
     },
     [roomId, setTypingUser]
   );

@@ -29,8 +29,12 @@ export const Login: FC = () => {
 
   const onSubmit = async (data: FieldValues) => {
     if (data.email && data.password) {
-      const formData = data as FormValues;
-      await login(formData);
+      try {
+        const formData = data as FormValues;
+        await login(formData);
+      } catch (e) {
+        console.error(e);
+      }
     }
   };
 

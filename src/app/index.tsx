@@ -8,8 +8,10 @@ import { client } from './apollo';
 import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
 import { fontAssets } from '@chatty/theme';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useFonts } from 'expo-font';
+import { ErrorBoundary } from 'react-error-boundary';
+import { ErrorScreen } from '@chatty/screens';
 
 LogBox.ignoreLogs(['Avatar: Support for defaultProps']);
 SplashScreen.preventAutoHideAsync();
@@ -38,10 +40,16 @@ const AppContent = () => {
 
 export default () => {
   return (
-    <ApolloProvider client={client}>
-      <AuthProvider>
-        <AppContent />
-      </AuthProvider>
-    </ApolloProvider>
+    <ErrorBoundary
+      FallbackComponent={({ resetErrorBoundary }) => (
+        <ErrorScreen onReset={resetErrorBoundary} />
+      )}
+    >
+      <ApolloProvider client={client}>
+        <AuthProvider>
+          <AppContent />
+        </AuthProvider>
+      </ApolloProvider>
+    </ErrorBoundary>
   );
 };
