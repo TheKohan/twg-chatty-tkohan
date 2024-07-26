@@ -1,6 +1,6 @@
 # twg-chatty-tkohan
 
-React Native Expo chat leveraging websockets and GraphQL.
+React Native Expo chat leveraging websockets and GraphQL. Native Chat App in less than 72h 💥
 
 ![Screen1.jpg](images/Screen1.png)
 
