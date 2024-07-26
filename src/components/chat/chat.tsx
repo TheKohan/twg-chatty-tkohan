@@ -1,12 +1,10 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
-import { Platform, View } from 'react-native';
+import { View } from 'react-native';
 import { GiftedChat, IMessage } from 'react-native-gifted-chat';
 import { Message, UserType } from '@chatty/__generated__/graphql';
 import { mapToGiftedMessage, mapUserToGifted } from '@chatty/utils';
 import { colors } from '@chatty/theme';
 import {
-  useGetRoom,
-  useKeyboardVisible,
   useMessageAddedSubscription,
   useSendMessage,
   useSetTyping,

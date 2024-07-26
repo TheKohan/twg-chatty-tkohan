@@ -8,7 +8,6 @@ import React, {
 } from 'react';
 import * as SecureStorage from 'expo-secure-store';
 import { UserType } from '@chatty/__generated__/graphql';
-import { useMutation, useQuery } from '@apollo/client';
 import { AUTH_TOKEN_KEY, env } from '@chatty/utils';
 import { useGetUser, useLogin, useRegister } from '@chatty/hooks';
 
