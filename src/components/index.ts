@@ -3,7 +3,7 @@ export * from './typography';
 export * from './button';
 export * from './loader';
 export * from './status-wrapper';
-export * from './headers.tsx';
+export * from './headers';
 export * from './chat';
 export * from './input';
 export * from './room-list';

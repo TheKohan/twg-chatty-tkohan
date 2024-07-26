@@ -37,10 +37,10 @@ export const Chat: FC<ChatProps> = ({ roomId, user, initialMessages = [] }) => {
     initialMessages.map(mapToGiftedMessage)
   );
   const [isTyping, setIsTyping] = useState(false);
-  
 
   useEffect(() => {
     if (!typingSub.data) return;
+    if (typingSub.data.typingUser?.id === user?.id) return;
 
     setIsTyping(true);
     const timeout = setTimeout(() => setIsTyping(false), TYPING_TIMEOUT);

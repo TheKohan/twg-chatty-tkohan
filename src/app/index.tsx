@@ -11,7 +11,6 @@ import { fontAssets } from '@chatty/theme';
 import { useEffect } from 'react';
 import { useFonts } from 'expo-font';
 
-/** @TODO try to fix */
 LogBox.ignoreLogs(['Avatar: Support for defaultProps']);
 SplashScreen.preventAutoHideAsync();
 
