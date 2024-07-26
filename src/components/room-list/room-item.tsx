@@ -40,7 +40,10 @@ export const RoomItem: React.FC<{ room: SingleRoomType }> = ({ room }) => {
       );
 
       const nowUTC = DateTime.utc();
-      const isActive = nowUTC.diff(lastMessageDate, ['seconds']).seconds < 60;
+      const lessThanOneMinuteAgo =
+        nowUTC.diff(lastMessageDate, ['seconds']).seconds < 60;
+
+      const isActive = lessThanOneMinuteAgo && isLastMessageNotByMe;
 
       setActive(isActive);
       setTimeAgo(timeAgoFromUTC(lastMessageDate));
