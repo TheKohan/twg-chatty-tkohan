@@ -36,7 +36,8 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-if (process.env.NODE_ENV === 'development') {
+if (env.nodeEnv === 'development') {
+  // This is for local env to not needing to auth everytime
   SecureStorage.setItem(AUTH_TOKEN_KEY, env.authToken ?? '');
 }
 

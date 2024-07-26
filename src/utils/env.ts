@@ -3,6 +3,7 @@ const getEnv = () => {
     'EXPO_PUBLIC_API_TOKEN',
     'EXPO_PUBLIC_API_HTTP_URL',
     'EXPO_PUBLIC_API_WS_URL',
+    'EXPO_PUBLIC_NODE_ENV',
   ] as const;
 
   const env: Record<string, string> = {};
@@ -19,6 +20,7 @@ const getEnv = () => {
     authToken: env.EXPO_PUBLIC_API_TOKEN,
     apiUrl: env.EXPO_PUBLIC_API_HTTP_URL,
     wsUrl: env.EXPO_PUBLIC_API_WS_URL,
+    nodeEnv: env.EXPO_PUBLIC_NODE_ENV,
   } as const;
 };
 

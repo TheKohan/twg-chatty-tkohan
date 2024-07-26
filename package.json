@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "expo/AppEntry.js",
   "scripts": {
-    "start": "expo start -c",
-    "dev": "NODE_ENV=development expo start -c",
+    "start": "EXPO_PUBLIC_NODE_ENV=production expo start -c",
+    "dev": "EXPO_PUBLIC_NODE_ENV=development expo start -c",
     "android": "expo start --android",
     "compile": "graphql-codegen --config codegen.ts",
     "watch": "graphql-codegen --config codegen.ts --watch",
