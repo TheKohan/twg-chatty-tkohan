@@ -4,7 +4,11 @@ import { useNavigation } from '@react-navigation/native';
 import { useGetRoom } from '@chatty/hooks';
 import { useAuth } from '@chatty/context';
 import { Typography } from '../typography';
-import { dateTimeFromUTCString, timeAgoFromUTC } from '@chatty/utils';
+import {
+  dateTimeFromUTCString,
+  getUserNameFromMessages,
+  timeAgoFromUTC,
+} from '@chatty/utils';
 import { StatusWrapper } from '../status-wrapper';
 import { SingleRoomType } from '@chatty/__generated__/graphql';
 import { RoomsNavigationProp } from '@chatty/types';
@@ -47,8 +51,13 @@ export const RoomItem: React.FC<{ room: SingleRoomType }> = ({ room }) => {
     return () => clearInterval(interval);
   }, [lastMessage, isLastMessageNotByMe]);
 
+  const otherUserName = getUserNameFromMessages(
+    user?.id ?? '',
+    (data?.room?.messages ?? []).filter(m => m != null)
+  );
+
   const navigateToRoom = () =>
-    navigate('Room', { roomId: room.id ?? '', roomName: room.name ?? '' });
+    navigate('Room', { roomId: room.id ?? '', roomName: otherUserName });
 
   return (
     <TouchableOpacity onPress={navigateToRoom} activeOpacity={0.8}>
