@@ -24,14 +24,14 @@ const absintheSocket = AbsintheSocket.create(phoenixSocket);
 
 const errorLink = onError(({ graphQLErrors, networkError, operation }) => {
   if (graphQLErrors) {
-    for (let err of graphQLErrors) {
+    for (const err of graphQLErrors) {
       if (err.message.includes('Unauthorized')) {
         SecureStore.deleteItemAsync(AUTH_TOKEN_KEY);
       }
       console.error(
         `[GraphQL error]: Message: ${err.message}, Location: ${err.locations}, Path: ${err.path}`,
         operation,
-        err
+        err,
       );
     }
   }
@@ -66,8 +66,9 @@ const splitLink = split(
       definition.operation === 'subscription'
     );
   },
+  // biome-ignore lint/suspicious/noExplicitAny: Possible type mismatch
   wsLink as any,
-  link
+  link,
 );
 
 export const client = new ApolloClient({

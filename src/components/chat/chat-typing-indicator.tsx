@@ -1,5 +1,5 @@
 import { borders, colors } from '@chatty/theme';
-import React, { FC, useEffect } from 'react';
+import React, { type FC, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
@@ -21,16 +21,16 @@ export const TypingIndicator: FC = () => {
       dot.value = withRepeat(
         withSequence(
           withTiming(2, { duration: 300, easing: Easing.ease }),
-          withTiming(-2, { duration: 300, easing: Easing.ease })
+          withTiming(-2, { duration: 300, easing: Easing.ease }),
         ),
         -1,
-        true
+        true,
       );
     };
     setTimeout(() => animateDot(dot1, 0), 0);
     setTimeout(() => animateDot(dot2, 150), 150);
     setTimeout(() => animateDot(dot3, 300), 300);
-  }, []);
+  }, [dot1, dot2, dot3]);
 
   const animatedStyleDot1 = useAnimatedStyle(() => ({
     transform: [{ translateY: dot1.value }],

@@ -1,8 +1,12 @@
 import { borders, colors } from '@chatty/theme';
-import { FC } from 'react';
-import { BubbleProps, IMessage, Bubble } from 'react-native-gifted-chat';
+import type { FC } from 'react';
+import {
+  type BubbleProps,
+  type IMessage,
+  Bubble,
+} from 'react-native-gifted-chat';
 
-export const ChatBubble: FC<Readonly<BubbleProps<IMessage>>> = props => {
+export const ChatBubble: FC<Readonly<BubbleProps<IMessage>>> = (props) => {
   return (
     <Bubble
       {...props}

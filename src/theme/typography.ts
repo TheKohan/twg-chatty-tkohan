@@ -1,4 +1,4 @@
-import { TextStyle } from 'react-native';
+import type { TextStyle } from 'react-native';
 
 const FONT_PATH = '../../assets/fonts';
 
@@ -7,7 +7,9 @@ export const fontAssets = {
   'Poppins-Regular': require(`${FONT_PATH}/Poppins-Regular.ttf`),
   'Poppins-SemiBold': require(`${FONT_PATH}/Poppins-SemiBold.ttf`),
   'Poppins-Medium': require(`${FONT_PATH}/Poppins-Medium.ttf`),
-  'SF-Compact-Display-Regular': require(`${FONT_PATH}/SFCompactDisplay-Regular.otf`),
+  'SF-Compact-Display-Regular': require(
+    `${FONT_PATH}/SFCompactDisplay-Regular.otf`,
+  ),
   'SF-Compact-Display-Bold': require(`${FONT_PATH}/SFCompactDisplay-Bold.otf`),
   'SF-Compact-Text-Regular': require(`${FONT_PATH}/SFCompactText-Regular.otf`),
 } as const;

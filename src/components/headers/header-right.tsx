@@ -1,8 +1,8 @@
 import { borders, colors } from '@chatty/theme';
-import React, { FC } from 'react';
+import React, { type FC } from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { Icon } from '../icon';
-import { RoomParams } from './header';
+import type { RoomParams } from './header';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 type HeaderRightProps = {

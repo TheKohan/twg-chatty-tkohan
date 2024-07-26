@@ -1,9 +1,9 @@
 import { colors } from '@chatty/theme';
-import { FC, useState } from 'react';
-import { SendProps, IMessage, Send } from 'react-native-gifted-chat';
+import { type FC, useState } from 'react';
+import { type SendProps, type IMessage, Send } from 'react-native-gifted-chat';
 import { Icon } from '../icon';
 
-export const ChatSendButton: FC<SendProps<IMessage>> = props => {
+export const ChatSendButton: FC<SendProps<IMessage>> = (props) => {
   const [pressed, setPressed] = useState(false);
 
   return (

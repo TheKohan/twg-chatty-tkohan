@@ -1,4 +1,4 @@
-import { Socket, SocketConnectOption } from 'phoenix';
+import { Socket, type SocketConnectOption } from 'phoenix';
 
 type SockParamsPromise = () => Promise<Record<string, unknown>>;
 type SocketParams =
@@ -23,11 +23,11 @@ export default class AsyncParamsPhoenixSocket extends Socket {
 
   connect(_params: SocketParams): void {
     if (
-      this.params?.constructor == Function &&
+      this.params?.constructor === Function &&
       (this.params as SockParamsPromise)()?.constructor === Promise
     ) {
-      Promise.resolve((this.params as SockParamsPromise)()).then(params =>
-        super.connect(params)
+      Promise.resolve((this.params as SockParamsPromise)()).then((params) =>
+        super.connect(params),
       );
     } else {
       super.connect();

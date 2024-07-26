@@ -1,5 +1,5 @@
-import { RoomsType } from '@chatty/__generated__/graphql';
-import React from 'react';
+import type { RoomsType } from '@chatty/__generated__/graphql';
+import type React from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import { RoomItem } from './room-item';
 import { View } from 'react-native';
@@ -12,7 +12,7 @@ export const RoomList: React.FC<{ userRooms: RoomsType }> = ({ userRooms }) => {
       {userRooms.rooms && userRooms.rooms.length > 0 ? (
         <FlatList
           data={userRooms.rooms}
-          keyExtractor={room => room?.id ?? ''}
+          keyExtractor={(room) => room?.id ?? ''}
           contentContainerStyle={styles.flatListContainer}
           renderItem={({ item }) => (item ? <RoomItem room={item} /> : null)}
         />

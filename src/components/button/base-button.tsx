@@ -1,7 +1,7 @@
-import { Pressable, View, ViewStyle } from 'react-native';
-import { Icon, IconVariant } from '../icon';
+import { Pressable, View, type ViewStyle } from 'react-native';
+import { Icon, type IconVariant } from '../icon';
 import { Typography } from '../typography';
-import { colors, ColorVariant } from '@chatty/theme';
+import { colors, type ColorVariant } from '@chatty/theme';
 import { useState } from 'react';
 
 export type BaseButtonProps = {

@@ -1,8 +1,8 @@
-import React from 'react';
+import type React from 'react';
 import { StyleSheet, ViewStyle } from 'react-native';
-import { BaseButton, BaseButtonProps } from './base-button';
+import { BaseButton, type BaseButtonProps } from './base-button';
 import { borders, colors } from '@chatty/theme';
-import { MakeOptional } from '@chatty/utils';
+import type { MakeOptional } from '@chatty/utils';
 
 type PublicButtonProps = MakeOptional<
   Omit<
@@ -31,7 +31,7 @@ type IconButtonProps = {
 
 type ButtonProps = PrimaryButtonProps | LabelButtonProps | IconButtonProps;
 
-export const Button: React.FC<ButtonProps> = props => {
+export const Button: React.FC<ButtonProps> = (props) => {
   const { variant, ...rest } = props;
 
   return (

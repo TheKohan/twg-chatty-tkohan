@@ -1,5 +1,5 @@
-import { Message, UserType } from '@chatty/__generated__/graphql';
-import { IChatMessage, User } from 'react-native-gifted-chat';
+import type { Message, UserType } from '@chatty/__generated__/graphql';
+import type { IChatMessage, User } from 'react-native-gifted-chat';
 
 export const mapToGiftedMessage = (message: Message): IChatMessage => {
   return {

@@ -1,16 +1,17 @@
-import React, { useCallback, useState } from 'react';
+import type React from 'react';
+import { useCallback, useState } from 'react';
 import {
   View,
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  TextInputProps,
+  type TextInputProps,
 } from 'react-native';
 import {
-  Control,
+  type Control,
   Controller,
-  RegisterOptions,
-  FieldValues,
+  type RegisterOptions,
+  type FieldValues,
 } from 'react-hook-form';
 import { borders, colors } from '@chatty/theme';
 import { Typography } from '../typography';
@@ -51,7 +52,7 @@ export const Input: React.FC<InputProps> = ({
         const handleBlur = useCallback(() => {
           onBlur();
           setIsFocused(false);
-        }, []);
+        }, [onBlur]);
 
         const handleFocus = useCallback(() => {
           setIsFocused(true);
@@ -60,8 +61,8 @@ export const Input: React.FC<InputProps> = ({
         const inputBorderColor = isFocused
           ? colors.plum500
           : error
-          ? colors.error
-          : 'white';
+            ? colors.error
+            : 'white';
 
         return (
           <View>

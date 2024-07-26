@@ -1,16 +1,16 @@
-import React, { FC, useState } from 'react';
+import React, { type FC, useState } from 'react';
 import { Dimensions } from 'react-native';
 import {
-  InputToolbarProps,
-  IMessage,
+  type InputToolbarProps,
+  type IMessage,
   InputToolbar,
   Composer,
-  ComposerProps,
+  type ComposerProps,
 } from 'react-native-gifted-chat';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from '@chatty/theme';
 
-export const ChatInput: FC<InputToolbarProps<IMessage>> = props => {
+export const ChatInput: FC<InputToolbarProps<IMessage>> = (props) => {
   const insets = useSafeAreaInsets();
   const [isFocused, setIsFocused] = useState(false);
 
@@ -21,11 +21,11 @@ export const ChatInput: FC<InputToolbarProps<IMessage>> = props => {
         ...composerProps.textInputProps,
         autoCorrect: false,
         autoCapitalize: 'none',
-        onFocus: e => {
+        onFocus: (e) => {
           setIsFocused(true);
           composerProps.textInputProps?.onFocus?.(e);
         },
-        onBlur: e => {
+        onBlur: (e) => {
           setIsFocused(false);
           composerProps.textInputProps?.onBlur?.(e);
         },

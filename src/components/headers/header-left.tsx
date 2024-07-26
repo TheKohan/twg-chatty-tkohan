@@ -1,8 +1,8 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Icon } from '../icon';
 import { Typography } from '../typography';
-import { RoomParams } from './header';
+import type { RoomParams } from './header';
 import { Button } from '../button';
 
 type HeaderLeftProps = {

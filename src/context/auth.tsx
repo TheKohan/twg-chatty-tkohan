@@ -3,11 +3,11 @@ import React, {
   useState,
   useContext,
   useEffect,
-  FC,
-  PropsWithChildren,
+  type FC,
+  type PropsWithChildren,
 } from 'react';
 import * as SecureStorage from 'expo-secure-store';
-import { UserType } from '@chatty/__generated__/graphql';
+import type { UserType } from '@chatty/__generated__/graphql';
 import { AUTH_TOKEN_KEY, env } from '@chatty/utils';
 import { useGetUser, useLogin, useRegister } from '@chatty/hooks';
 
@@ -66,13 +66,13 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     };
 
     checkUserLoggedIn();
-  }, []);
+  }, [refetchUser, user]);
 
   const login = async ({ email, password }: LoginData) => {
     const { data } = await loginUserMutation({
       variables: { email, password },
     });
-    if (data && data.loginUser && data.loginUser.token) {
+    if (data?.loginUser?.token) {
       await SecureStorage.setItemAsync(AUTH_TOKEN_KEY, data.loginUser.token);
       setUser(data.loginUser.user ?? undefined);
       await client.resetStore();

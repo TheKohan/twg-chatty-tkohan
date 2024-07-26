@@ -1,5 +1,5 @@
 import { colors } from '@chatty/theme';
-import { FC } from 'react';
+import type { FC } from 'react';
 import { View, ActivityIndicator } from 'react-native';
 
 export const Loader: FC = () => {

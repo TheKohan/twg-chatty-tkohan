@@ -6,10 +6,10 @@ export const useKeyboardVisible = (): boolean => {
 
   useEffect(() => {
     const keyboardShowListener = Keyboard.addListener('keyboardWillShow', () =>
-      setKeyboardVisible(true)
+      setKeyboardVisible(true),
     );
     const keyboardHideListener = Keyboard.addListener('keyboardWillHide', () =>
-      setKeyboardVisible(false)
+      setKeyboardVisible(false),
     );
 
     return () => {

@@ -1,5 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { graphql } from '@chatty/__generated__/gql';
+import { GET_ROOM } from './use-get-room';
 
 const SEND_MESSAGE = graphql(`
   mutation SendMessage($roomId: String!, $body: String!) {
@@ -19,5 +20,9 @@ const SEND_MESSAGE = graphql(`
 `);
 
 export const useSendMessage = () => {
-  return useMutation(SEND_MESSAGE);
+  return useMutation(SEND_MESSAGE, {
+    refetchQueries:[
+      GET_ROOM
+    ]
+  });
 };

@@ -1,8 +1,8 @@
-import { NativeStackHeaderProps } from '@react-navigation/native-stack';
-import { FC } from 'react';
+import type { NativeStackHeaderProps } from '@react-navigation/native-stack';
+import type { FC } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { RootStackParamList } from '@chatty/types';
+import type { RootStackParamList } from '@chatty/types';
 import { colors, borders } from '@chatty/theme';
 import { useAuth } from '@chatty/context';
 import { HeaderLeft } from './header-left';

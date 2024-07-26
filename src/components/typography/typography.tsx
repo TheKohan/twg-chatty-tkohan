@@ -1,17 +1,17 @@
 import {
   colors,
-  ColorVariant,
+  type ColorVariant,
   typography,
-  TypographyVariant,
+  type TypographyVariant,
 } from '@chatty/theme';
 import {
   Text,
   StyleSheet,
-  StyleProp,
-  TextStyle,
-  TextProps,
+  type StyleProp,
+  type TextStyle,
+  type TextProps,
 } from 'react-native';
-import { PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
 
 type TypographyProps = {
   variant: TypographyVariant;

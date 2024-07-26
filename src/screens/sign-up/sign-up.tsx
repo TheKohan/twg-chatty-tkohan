@@ -1,9 +1,9 @@
 import { Button, Input, Loader, Typography } from '@chatty/components';
 import { colors } from '@chatty/theme';
-import { RoomsNavigationProp } from '@chatty/types';
+import type { RoomsNavigationProp } from '@chatty/types';
 import { useNavigation } from '@react-navigation/native';
-import { FC } from 'react';
-import { FieldValues, useForm } from 'react-hook-form';
+import type { FC } from 'react';
+import { type FieldValues, useForm } from 'react-hook-form';
 import {
   StyleSheet,
   TouchableOpacity,
@@ -112,7 +112,7 @@ export const SignUp: FC = () => {
               label='password confirmation'
               rules={{
                 required: 'Password confirmation is required',
-                validate: value =>
+                validate: (value) =>
                   value === control._formValues.password ||
                   'Passwords do not match',
               }}

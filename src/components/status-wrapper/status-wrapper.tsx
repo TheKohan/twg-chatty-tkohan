@@ -1,6 +1,11 @@
-import { FC, PropsWithChildren } from 'react';
+import type { FC, PropsWithChildren } from 'react';
 import { Loader } from '../loader';
-import { StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native';
+import {
+  type StyleProp,
+  TouchableOpacity,
+  View,
+  type ViewStyle,
+} from 'react-native';
 import { Typography } from '../typography';
 
 type StatusWrapperProps = {

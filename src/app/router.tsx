@@ -1,8 +1,8 @@
 import { Header } from '@chatty/components';
 import { Login, Room, Rooms, SignUp } from '@chatty/screens';
-import { RootStackParamList } from '@chatty/types';
+import type { RootStackParamList } from '@chatty/types';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { FC } from 'react';
+import type { FC } from 'react';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -13,7 +13,7 @@ type RouterProps = {
 export const Router: FC<RouterProps> = ({ isAuthenticated }) => {
   return (
     <Stack.Navigator initialRouteName='Rooms'>
-      {!!isAuthenticated ? (
+      {isAuthenticated ? (
         // For more sophisticated routing setup you could make some
         // config and map it here, but it's overkill for 4 routes
         <>

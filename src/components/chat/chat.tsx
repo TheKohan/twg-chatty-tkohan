@@ -1,7 +1,7 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { type FC, useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { GiftedChat, IMessage } from 'react-native-gifted-chat';
-import { Message, UserType } from '@chatty/__generated__/graphql';
+import { GiftedChat, type IMessage } from 'react-native-gifted-chat';
+import type { Message, UserType } from '@chatty/__generated__/graphql';
 import { mapToGiftedMessage, mapUserToGifted } from '@chatty/utils';
 import { colors } from '@chatty/theme';
 import {
@@ -33,7 +33,7 @@ export const Chat: FC<ChatProps> = ({ roomId, user, initialMessages = [] }) => {
   const [sendMessageToRoom] = useSendMessage();
 
   const [messages, setMessages] = useState<IMessage[]>(
-    initialMessages.map(mapToGiftedMessage)
+    initialMessages.map(mapToGiftedMessage),
   );
   const [isTyping, setIsTyping] = useState(false);
 
@@ -44,14 +44,14 @@ export const Chat: FC<ChatProps> = ({ roomId, user, initialMessages = [] }) => {
     setIsTyping(true);
     const timeout = setTimeout(() => setIsTyping(false), TYPING_TIMEOUT);
     return () => clearTimeout(timeout);
-  }, [typingSub.data]);
+  }, [typingSub.data, user?.id]);
 
   useEffect(() => {
     const message = messageAddedData?.messageAdded;
     if (!message) return;
 
-    setMessages(prevMessages =>
-      GiftedChat.append(prevMessages, [mapToGiftedMessage(message)])
+    setMessages((prevMessages) =>
+      GiftedChat.append(prevMessages, [mapToGiftedMessage(message)]),
     );
   }, [messageAddedData]);
 
@@ -67,7 +67,7 @@ export const Chat: FC<ChatProps> = ({ roomId, user, initialMessages = [] }) => {
         }
       }
     },
-    [roomId, sendMessageToRoom]
+    [roomId, sendMessageToRoom],
   );
 
   const handleInputTextChanged = useCallback(
@@ -79,7 +79,7 @@ export const Chat: FC<ChatProps> = ({ roomId, user, initialMessages = [] }) => {
         console.error(e);
       }
     },
-    [roomId, setTypingUser]
+    [roomId, setTypingUser],
   );
 
   return (
@@ -95,9 +95,9 @@ export const Chat: FC<ChatProps> = ({ roomId, user, initialMessages = [] }) => {
         bottomOffset={-30}
         messagesContainerStyle={{ paddingBottom: insets.bottom + 24 }}
         renderFooter={() => isTyping && <TypingIndicator />}
-        renderBubble={props => <ChatBubble {...props} />}
-        renderInputToolbar={props => <ChatInput {...props} />}
-        renderSend={props => <ChatSendButton {...props} />}
+        renderBubble={(props) => <ChatBubble {...props} />}
+        renderInputToolbar={(props) => <ChatInput {...props} />}
+        renderSend={(props) => <ChatSendButton {...props} />}
         renderMessageImage={() => <Icon.profile width={40} height={40} />}
         renderDay={() => <View />}
         renderAvatar={null}

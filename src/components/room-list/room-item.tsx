@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import type React from 'react';
+import { useEffect, useState } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useGetRoom } from '@chatty/hooks';
@@ -10,53 +11,36 @@ import {
   timeAgoFromUTC,
 } from '@chatty/utils';
 import { StatusWrapper } from '../status-wrapper';
-import { SingleRoomType } from '@chatty/__generated__/graphql';
-import { RoomsNavigationProp } from '@chatty/types';
+import type { SingleRoomType } from '@chatty/__generated__/graphql';
+import type { RoomsNavigationProp } from '@chatty/types';
 import { Icon } from '../icon';
 import { DateTime } from 'luxon';
 import { colors, borders } from '@chatty/theme';
 
-const ROOM_POOL_INTERVAL = 1000 * 10; // 10 seconds
+const ROOM_POOL_INTERVAL = 2000 * 1; // 2 seconds
 
 export const RoomItem: React.FC<{ room: SingleRoomType }> = ({ room }) => {
-  const [active, setActive] = useState(false);
-  const [timeAgo, setTimeAgo] = useState('');
-
   const { navigate } = useNavigation<RoomsNavigationProp>();
   const { user } = useAuth();
   const { data, loading, error, refetch } = useGetRoom({
     roomId: room.id ?? '',
-    pollInterval: 1000 * 10,
+    pollInterval: ROOM_POOL_INTERVAL,
   });
 
   const lastMessage = data?.room?.messages?.[0];
   const isLastMessageNotByMe = lastMessage?.user?.id !== user?.id;
 
-  useEffect(() => {
-    const updateTimeAgo = () => {
-      if (!lastMessage) return;
-      const lastMessageDate = dateTimeFromUTCString(
-        lastMessage?.insertedAt ?? ''
-      );
+  const lastMessageDate = dateTimeFromUTCString(
+    lastMessage?.insertedAt ?? '',
+  );
+  const lessThanOneMinuteAgo =
+  DateTime.utc().diff(lastMessageDate, ['seconds']).seconds < 60;
 
-      const nowUTC = DateTime.utc();
-      const lessThanOneMinuteAgo =
-        nowUTC.diff(lastMessageDate, ['seconds']).seconds < 60;
-
-      const isActive = lessThanOneMinuteAgo && isLastMessageNotByMe;
-
-      setActive(isActive);
-      setTimeAgo(timeAgoFromUTC(lastMessageDate));
-    };
-    updateTimeAgo();
-
-    const interval = setInterval(updateTimeAgo, ROOM_POOL_INTERVAL);
-    return () => clearInterval(interval);
-  }, [lastMessage, isLastMessageNotByMe]);
-
+  const isActive = lessThanOneMinuteAgo && isLastMessageNotByMe;
+  const timeAgo = timeAgoFromUTC(lastMessageDate);
   const otherUserName = getUserNameFromMessages(
     user?.id ?? '',
-    (data?.room?.messages ?? []).filter(m => m != null)
+    (data?.room?.messages ?? []).filter((m) => m != null),
   );
 
   const navigateToRoom = () =>
@@ -68,10 +52,10 @@ export const RoomItem: React.FC<{ room: SingleRoomType }> = ({ room }) => {
         loading={loading}
         error={!!error}
         onTryAgain={refetch}
-        style={[styles.container, active && styles.active]}
+        style={[styles.container, isActive && styles.active]}
       >
         <Icon.profile />
-        {active ? (
+        {isActive ? (
           <View style={styles.dot} />
         ) : (
           <Typography
@@ -85,14 +69,14 @@ export const RoomItem: React.FC<{ room: SingleRoomType }> = ({ room }) => {
         <View style={styles.content}>
           <Typography
             variant='titleInput'
-            color={active ? 'white' : 'black'}
+            color={isActive ? 'white' : 'black'}
             numberOfLines={1}
           >
             {room.name}
           </Typography>
           <Typography
             variant='bodyText'
-            color={active ? 'white' : 'black'}
+            color={isActive ? 'white' : 'black'}
             numberOfLines={1}
           >
             {lastMessage?.body ?? ''}

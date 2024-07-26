@@ -1,4 +1,4 @@
-import { RoomRouteProp } from '@chatty/types';
+import type { RoomRouteProp } from '@chatty/types';
 import { useRoute } from '@react-navigation/native';
 import { Chat, StatusWrapper } from '@chatty/components';
 import { useAuth } from '@chatty/context';
@@ -16,7 +16,7 @@ export const Room = () => {
     roomId: params.roomId,
   });
 
-  const initialMessages = (data?.room?.messages ?? []).filter(v => v != null);
+  const initialMessages = (data?.room?.messages ?? []).filter((v) => v != null);
 
   return (
     <StatusWrapper
