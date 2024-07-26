@@ -35,6 +35,7 @@ export const Login: FC = () => {
   };
 
   return (
+    // I mean we know how bad it is, but there's not much alternative on Expo Go built in
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
